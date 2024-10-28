@@ -40,6 +40,9 @@ setup(
                         'mlGene=GenoMLizer.rscripts:mlGene_main'
 		],
 	},
+	package_data={
+        	'GenoMLizer': ['*.sh', '*.r', '*.txt', '*.vcf.gz'],
+	},
 	install_requires=[
 		'pandas',
 		'vcf_parser'
