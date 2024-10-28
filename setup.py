@@ -42,6 +42,7 @@ setup(
 	},
 	install_requires=[
 		'pandas',
+		'vcf_parser'
 	],
 )
 
