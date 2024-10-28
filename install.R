@@ -1,0 +1,5 @@
+install.packages("MachineShop")
+install.packages("recipes")
+install.packages("readr")
+install.packages("doSNOW")
+install.packages("dplyr")
