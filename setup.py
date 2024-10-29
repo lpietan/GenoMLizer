@@ -1,23 +1,31 @@
 #!/usr/bin/env python3
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, Command
 import subprocess
 
-def install_r_dependencies():
-	try:
-		subprocess.run(['Rscript', 'install.R'], check=True)
-	except subprocess.CalledProcessError as e:
-		print("Failed to install R dependencies. Please check R installation and try again.")
-		raise e
+class InstallCommand(Command):
+	description = 'Install R dependencies and check bcftools'
+	user_options = []
 
-def check_bcftools():
-	try:
-		# Check if bcftools is installed
-		subprocess.run(['bcftools', '--version'], check=True)
-	except subprocess.CalledProcessError:
-		print("bcftools not found. Install bcftools before proceeding")
+	def initialize_options(self):
+		pass
 
+	def finalize_options(self):
+		pass
 
+	def run(self):
+        	# Check for bcftools
+		try:
+			subprocess.run(['bcftools', '--version'], check=True)
+		except subprocess.CalledProcessError:
+			print("Warning: bcftools not found. Please install bcftools manually before proceeding.")
+			
+        	# Install R dependencies
+		try:
+			subprocess.run(['Rscript', 'install.R'], check=True)
+		except subprocess.CalledProcessError as e:
+			print("Failed to install R dependencies. Please check R installation and try again.")
+			raise e
 
 setup(
 	name='GenoMLizer',
@@ -47,8 +55,8 @@ setup(
 		'pandas',
 		'vcf_parser'
 	],
+	cmdclass={
+		'install_dependencies': InstallCommand,
+	}
 )
 
-# Call to install R dependencies after Python dependencies
-install_r_dependencies()
-check_bcftools()
