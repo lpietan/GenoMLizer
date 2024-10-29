@@ -41,7 +41,7 @@ setup(
 		],
 	},
 	package_data={
-        	'GenoMLizer': ['*.sh', '*.r', '*.txt', '*.vcf.gz'],
+        	'GenoMLizer': ['*.sh', '*.R'],
 	},
 	install_requires=[
 		'pandas',
