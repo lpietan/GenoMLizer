@@ -8,7 +8,7 @@ import sys
 import subprocess
 import pkg_resources
 import os
-
+import GenoMLizer
 
 def main():
 	script_path = pkg_resources.resource_filename('GenoMLizer', 'dcSetup.sh')
