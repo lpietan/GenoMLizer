@@ -59,7 +59,7 @@ setup(
 		'vcf_parser'
 	],
 	cmdclass={
-		'install': CustomInstallCommand,
+		'install': InstallCommand,
 	}
 )
 
