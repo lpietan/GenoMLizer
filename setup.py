@@ -2,13 +2,19 @@
 
 from setuptools import setup, find_packages
 import subprocess
+import sys
+
+r_packages = [
+    "MachineShop", "recipes", "readr", "doSNOW", "dplyr"
+]
 
 def install_r_dependencies():
-	try:
-		subprocess.run(['Rscript', 'install.R'], check=True)
-	except subprocess.CalledProcessError as e:
-		print("Failed to install R dependencies. Please check R installation and try again.")
-		raise e
+	for package in r_packages:
+		try:
+			subprocess.check_call(['R', '-e', f'if(!requireNamespace("{package}", quietly=TRUE)) install.packages("{package}")'])
+		except subprocess.CalledProcessError:
+			print(f"Error installing R package: {package}", file=sys.stderr)
+			#sys.exit(1)
 
 def check_bcftools():
 	try:
@@ -18,7 +24,9 @@ def check_bcftools():
 		print("bcftools not found. Install bcftools before proceeding")
 
 # Call to install R dependencies
-#install_r_dependencies()
+install_r_dependencies()
+# Check for bcftools
+check_bcftools()
 
 setup(
 	name='GenoMLizer',
@@ -47,11 +55,7 @@ setup(
 	install_requires=[
 		'pandas',
 		'vcf_parser'
-	],
-	install_r_dependencies(),
-	check_bcftools()
+	]
 )
 
-# Call to check bcftools
-#check_bcftools()
 
