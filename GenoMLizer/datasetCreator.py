@@ -176,8 +176,8 @@ def main():
 
 	os.remove("temp")
 
-	cat('Dataset complete.')
-	cat('datasetCreator has finished successfully.')
+	print('Dataset complete.')
+	print('datasetCreator has finished successfully.')
 
 if __name__ == "__main__":
 	main()
