@@ -25,14 +25,14 @@ def main():
 	CADDBin = []
 
 	j = ','
-	if sys.argv[3] == "SFC" or sys.argv[3] == "DC":
+	if sys.argv[4] == "SFC" or sys.argv[4] == "DC":
 		correction_threshold = float(sys.argv[5])
 		lineIndex = 0
 		testSetIndex = []
 		testSetAlt = []
 		with open("gene.csv", "r") as f:
 			head_lines = f.readlines()
-		if sys.argv[3] == "SFC":
+		if sys.argv[4] == "SFC":
 			samSize = len(head_lines[1].split(',')) - 1
 			samThreshold = samSize * correction_threshold
 		else:
@@ -55,7 +55,7 @@ def main():
 			lineListNoName = lineList[1:]
 			num_var_list = [eval(str(i)) for i in lineListNoName]
 			## perform correction here
-			if sys.argv[3] == "SFC":
+			if sys.argv[4] == "SFC":
 				count = len([i for i in num_var_list if i > 0])
 				if count > samThreshold:
 					testSetIndex.append(lineIndex)
@@ -69,7 +69,7 @@ def main():
 							correctedVar.append(altValue)
 					num_var_list = correctedVar
 				lineIndex = lineIndex + 1
-			elif sys.argv[3] == "DC":
+			elif sys.argv[4] == "DC":
 				index_alt_alleles = [i for i, n in enumerate(num_var_list) if n > 0]
 				num_alt_alleles_for_correction = len(index_alt_alleles)
 				selected_targets_sum = np.sum(targets_for_correction[index_alt_alleles])
