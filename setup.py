@@ -12,7 +12,7 @@ setup(
 	entry_points={
 		'console_scripts': [
 			'datasetCreator=GenoMLizer.datasetCreator:main',
-			'split=GenoMLizer.split:main',
+			'splitTrainTest=GenoMLizer.splitTrainTest:main',
 			'varPrep=GenoMLizer.varPrep:main',
                         'geneTransform=GenoMLizer.geneTransform:main',
                         'genePrep=GenoMLizer.genePrep:main',
