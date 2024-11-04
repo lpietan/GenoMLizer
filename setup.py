@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
+from setuptools.command.install import install
 import subprocess
 import sys
 
@@ -23,10 +24,11 @@ def check_bcftools():
 	except subprocess.CalledProcessError:
 		print("bcftools not found. Install bcftools before proceeding")
 
-# Call to install R dependencies
-install_r_dependencies()
-# Check for bcftools
-check_bcftools()
+class InstallCommand(install):
+	def run(self):
+		install_r_dependencies()
+		check_bcftools()
+		install.run(self)
 
 setup(
 	name='GenoMLizer',
@@ -55,7 +57,10 @@ setup(
 	install_requires=[
 		'pandas',
 		'vcf_parser'
-	]
+	],
+	cmdclass={
+		'install': CustomInstallCommand,
+	}
 )
 
 
