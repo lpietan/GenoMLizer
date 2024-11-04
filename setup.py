@@ -1,34 +1,6 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
-from setuptools.command.install import install
-import subprocess
-import sys
-
-r_packages = [
-    "MachineShop", "recipes", "readr", "doSNOW", "dplyr"
-]
-
-def install_r_dependencies():
-	for package in r_packages:
-		try:
-			subprocess.check_call(['R', '-e', f'if(!requireNamespace("{package}", quietly=TRUE)) install.packages("{package}")'])
-		except subprocess.CalledProcessError:
-			print(f"Error installing R package: {package}", file=sys.stderr)
-			#sys.exit(1)
-
-def check_bcftools():
-	try:
-		# Check if bcftools is installed
-		subprocess.run(['bcftools', '--version'], check=True)
-	except subprocess.CalledProcessError:
-		print("bcftools not found. Install bcftools before proceeding")
-
-class InstallCommand(install):
-	def run(self):
-		install_r_dependencies()
-		check_bcftools()
-		install.run(self)
 
 setup(
 	name='GenoMLizer',
@@ -57,10 +29,7 @@ setup(
 	install_requires=[
 		'pandas',
 		'vcf_parser'
-	],
-	cmdclass={
-		'install': InstallCommand,
-	}
+	]
 )
 
 
