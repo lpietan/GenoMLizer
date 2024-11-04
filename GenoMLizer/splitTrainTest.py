@@ -12,14 +12,14 @@ def main():
 	zvFile = ncFile[:-4] + "_zv.csv"
 	zvFileT = zvFile[:-4] + "_T.csv"
 	df = pd.read_csv(filename, dtype=object)
-	df_test = df.sample(frac=0.2, replace=False, axis=1, random_state=sys.argv[3])
+	df_test = df.sample(frac=0.2, replace=False, axis=1, random_state=int(sys.argv[3]))
 	df_train = df.drop(list(df_test.columns), axis = 1)
 	df_test.to_csv(testFile)
 	#df_train.to_csv(trainFile)
 
 	# NC80
 	# fail = 0.8*len(df_train.columns)
-	fail = sys.argv[2]*len(df_train.columns)
+	fail = float(sys.argv[2])*len(df_train.columns)
 	remove = False
 	j = ','
 	# dataset file
