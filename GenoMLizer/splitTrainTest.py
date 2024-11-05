@@ -8,10 +8,10 @@ def main():
 	## Split
 	filename = sys.argv[1]
 	testFile = filename[:-4] + "_Test.csv"
-	trainFile = filename[:-4] + "_Train.csv"
+	trainFile = filename[:-4] + "_train.csv"
 	ncFile = trainFile[:-4] + "_NC.csv"
 	zvFile = ncFile[:-4] + "_zv.csv"
-	zvFileT = zvFile[:-4] + "_T.csv"
+	zvFileT = filename[:-4] + "_Train.csv"
 	df = pd.read_csv(filename, dtype=object)
 	df_test = df.sample(frac=0.2, replace=False, axis=1, random_state=int(sys.argv[3]))
 	df_train = df.drop(list(df_test.columns), axis = 1)
