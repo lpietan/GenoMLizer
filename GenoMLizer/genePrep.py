@@ -40,7 +40,7 @@ def main():
 	script_path = pkg_resources.resource_filename('GenoMLizer', 'geneSetup.sh')
 	subprocess.run(['bash', script_path, "test_temp2.csv", check=True)
 
-	binVar = int(sys.argv[3]) ##25000
+	binVar = int(sys.argv[4]) ##25000
 	binThreshold = binVar + 1
 	lastGeneVar = ''
 	chromosomes = 'chr1'
@@ -51,8 +51,8 @@ def main():
 
 	j = ','
 	# dataset file
-	if sys.argv[4] == 1:
-		with open(sys.argv[5], "r") as f:
+	if int(sys.argv[5]) == 1:
+		with open(sys.argv[6], "r") as f:
 			index_alt_lines = f.readlines()
 			index_line = [eval(i) for i in index_alt_lines[0].split(",")]
 			alt_line = [eval(i) for i in index_alt_lines[1].split(",")]
@@ -71,7 +71,7 @@ def main():
 			lineListNoName = lineList[1:]
 			num_var_list = [eval(str(i)) for i in lineListNoName]
 			## perform correction here
-			if sys.argv[4] == 1:
+			if int(sys.argv[5]) == 1:
 				if lineIndex in index_line:
 					correctedVar = []
 					if sum(num_var_list) > 0:
