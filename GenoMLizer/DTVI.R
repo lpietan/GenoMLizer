@@ -27,14 +27,14 @@ d[,col_names] <- lapply(d[,col_names] , factor)
 }
 
 h <- length(d)
-cat("Number of variables in starting dataset")
-cat(h)
+cat("Number of variables in starting dataset\n")
+cat(h, "\n")
 
 ## Start DT-VI-Iter filter
-cat("Starting DT-VI-Iter Filtering")
+cat("Starting DT-VI-Iter Filtering\n")
 
 d$Targets <- factor(d$Targets)
-cat("  *************************   DATASET SUMMARY   *************************  ")
+cat("  *************************   DATASET SUMMARY   *************************  \n")
 str(d) %>% head
 
 ## Fix dataset varibales for tree package
@@ -51,13 +51,13 @@ t_df <- d[1]
 varImp_dataframe <- t_df
 targets <- t_df$Targets
 i <- 2:length(d)
-cat("Initial index list Complete")
+cat("Initial index list Complete\n")
 
 if (as.numeric(args[4]) > 0 && as.numeric(args[4]) < 1){
-cat("Using specified threshold for accuracy")
+cat("Using specified threshold for accuracy\n")
 acc_thresh = as.numeric(args[4])
 } else {
-cat("Using majority class accuracy threshold")
+cat("Using majority class accuracy threshold\n")
 ## Majority Class comparison
 ## This sets threshold of model to perform better than a mjority class model. majCl can be set to any desired threshold.
 sampleNumber <- length(t_df$Targets)
@@ -93,12 +93,12 @@ num_ID_vars = as.numeric(args[5]) - 1
 ## Number of iterations corresponds to DT-VI-1000-X
 for (iter in 1:as.numeric(args[6])) 
 {
-cat(iter)
+cat(iter, "\n")
 sseed <- sseed+iter
 
 while (length(i) > num_ID_vars)
 {
-cat(length(i))
+cat(length(i), "\n")
 set.seed(sseed)
 variables_selected <- sample(x=i, size=as.numeric(args[5]))
 df_2 <- d[variables_selected]
@@ -141,7 +141,7 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 #i <- i[! i %in% variables_selected]
 },
 error = function(e){
-cat("Error in larger dataset, breaking down dataset to proceed")
+cat("Error in larger dataset, breaking down dataset to proceed\n")
 var_half <- as.numeric(args[5])/2
 var_half1 <- var_half+1
 variables_selected_1 <- variables_selected[1:var_half]
@@ -178,7 +178,7 @@ VI_dataset <- select(df_2, all_of(newSelectedVariables))
 ## Add selected variable to final dataset
 varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
-cat("Successfully ran breakdown model 1")
+cat("Successfully ran breakdown model 1\n")
 df_2 <- d[variables_selected_2]
 df_2$Targets <- targets
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
@@ -210,9 +210,9 @@ VI_dataset <- select(df_2, all_of(newSelectedVariables))
 ## Add selected variable to final dataset
 varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
-cat("Successfully ran breakdown model 2")
+cat("Successfully ran breakdown model 2\n")
 #i <- i[! i %in% variables_selected]
-cat("Error handled successfully, moving on to next iteration")
+cat("Error handled successfully, moving on to next iteration\n")
 },
 finally = {
 i <- i[! i %in% variables_selected]
@@ -220,7 +220,7 @@ i <- i[! i %in% variables_selected]
 )
 }
 
-cat(length(i))
+cat(length(i), "\n")
 if (length(i) > 0){
 variables_selected <- i
 df_2 <- d[variables_selected]
@@ -264,13 +264,13 @@ i <- 2:length(d)
 d <- as.data.frame(varImp_dataframe)
 
 h <- length(d)
-cat("Number of selected variables")
-cat(h)
+cat("Number of selected variables\n")
+cat(h, "\n")
 
-cat("Variable Importance Filtering Complete")
+cat("Variable Importance Filtering Complete\n")
 
 ## Start translating variables
-cat("Starting to translate variables")
+cat("Starting to translate variables\n")
 
 d$Targets <- factor(d$Targets)
 
@@ -290,7 +290,7 @@ colnames(d) <- c(varSel)
 df_final <- as.data.frame(d)
 write.csv(df_final, args[2], row.names = TRUE)
 
-cat("Successfully translated variables")
+cat("Successfully translated variables\n")
 
 invisible(capture.output(file.remove('variableKeys_DTVI.csv')))
 
