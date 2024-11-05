@@ -88,6 +88,7 @@ settings(control = function() CVControl(seed = as.numeric(args[7])))
 
 ## Change seed for different random intermidiate dataset selections.
 sseed <- as.numeric(args[7]) - 1
+print(sseed)
 
 num_ID_vars = as.numeric(args[5]) - 1
 ## Number of iterations corresponds to DT-VI-1000-X
@@ -95,6 +96,7 @@ for (iter in 1:as.numeric(args[6]))
 {
 cat(iter, "\n")
 sseed <- sseed+iter
+print(sseed)
 
 while (length(i) > num_ID_vars)
 {
@@ -150,6 +152,7 @@ df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
 cat("Troubleshoot resample control error")
 print(model_dt)
+str(df_2)
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
 x <- as.MLModel(ML_fit)
 x <- x@steps
