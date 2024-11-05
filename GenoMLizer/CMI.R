@@ -111,7 +111,7 @@ h <- length(df_final)
 cat("Number of selected variables\n")
 cat(h, "\n")
 
-cat("CMI Filtering Complete")
+cat("CMI Filtering Complete\n")
 
 
 quit(save="no")
