@@ -21,29 +21,29 @@ rownames(d) <- d1
 d$Targets <- factor(d$Targets)
 
 h <- length(d)
-cat("Number of variables in starting dataset")
-cat(h)
+cat("Number of variables in starting dataset\n")
+cat(h, "\n")
 
 ## Start GLM filter
-cat("Starting GLM Filtering")
-cat("  *************************   DATASET SUMMARY   *************************  ")
+cat("Starting GLM Filtering\n")
+cat("  *************************   DATASET SUMMARY   *************************  \n")
 str(d) %>% head
 
 t_df <- d[1]
 UniGLM_dataframe <- t_df
 targets <- t_df$Targets
 i <- 2:length(d)
-cat("Initial index list Complete")
+cat("Initial index list Complete\n")
 
 if (args[3] == "F"){
-cat("Using F test for GLM filter")
+cat("Using F test for GLM filter\n")
 glm_filter <- function(x, y, step) {
   model_fit <- glm(y ~ ., family = binomial, data = data.frame(y, x))
   p_value <- drop1(model_fit, test = "F")[-1, "Pr(>F)"]
   p_value < step$threshold
 }
 } else {
-cat("Using Chisq test for GLM filter")
+cat("Using Chisq test for GLM filter\n")
 glm_filter <- function(x, y, step) {
   model_fit <- glm(y ~ ., family = binomial, data = data.frame(y, x))
   p_value <- drop1(model_fit, test = "Chisq")[-1, "Pr(>Chi)"]
@@ -54,7 +54,7 @@ glm_filter <- function(x, y, step) {
 set.seed(as.numeric(args[5]))
 while (length(i) > 999)
 {
-cat(length(i))
+cat(length(i), "\n")
 variables_selected <- sample(x=i, size=1000)
 df_2 <- d[variables_selected]
 df_2$Targets <- targets
@@ -79,7 +79,7 @@ UniGLM_dataframe <- cbind(UniGLM_dataframe, f)
 i <- i[! i %in% variables_selected]
 }
 
-cat(length(i))
+cat(length(i), "\n")
 variables_selected <- i
 df_2 <- d[variables_selected]
 df_2$Targets <- targets
@@ -104,9 +104,9 @@ d <- as.data.frame(UniGLM_dataframe)
 write.csv(d, args[2], row.names = TRUE)
 
 h <- length(d)
-cat("Number of selected variables")
-cat(h)
+cat("Number of selected variables\n")
+cat(h, "\n")
 
-cat("Univariate GLM Filtering Complete")
+cat("Univariate GLM Filtering Complete\n")
 
 quit(save="no")
