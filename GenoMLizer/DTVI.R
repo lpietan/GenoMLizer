@@ -141,13 +141,15 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 #i <- i[! i %in% variables_selected]
 },
 error = function(e){
-cat("Error in larger dataset, breaking down dataset to proceed\n")
+cat("Initial decision tree outside of parameters, breaking down dataset to proceed\n")
 var_half <- as.numeric(args[5])/2
 var_half1 <- var_half+1
 variables_selected_1 <- variables_selected[1:var_half]
 variables_selected_2 <- variables_selected[(var_half1):as.numeric(args[5])]
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
+cat("Troubleshoot resample control error")
+print(model_dt)
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
 x <- as.MLModel(ML_fit)
 x <- x@steps
