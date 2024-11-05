@@ -84,12 +84,10 @@ model_dt <- TunedModel(
 )
 
 ## Resample control (10-fold, defualt)
-#settings(control = function() CVControl(seed = as.numeric(args[7])))
-
+settings(control = CVControl(seed = as.numeric(args[7])))
 
 ## Change seed for different random intermidiate dataset selections.
 sseed <- as.numeric(args[7]) - 1
-print(sseed)
 
 num_ID_vars = as.numeric(args[5]) - 1
 ## Number of iterations corresponds to DT-VI-1000-X
@@ -97,7 +95,6 @@ for (iter in 1:as.numeric(args[6]))
 {
 cat(iter, "\n")
 sseed <- sseed+iter
-print(sseed)
 
 while (length(i) > num_ID_vars)
 {
@@ -151,10 +148,6 @@ variables_selected_1 <- variables_selected[1:var_half]
 variables_selected_2 <- variables_selected[(var_half1):as.numeric(args[5])]
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
-cat("Troubleshoot resample control error")
-print(model_dt)
-str(df_2)
-#settings(control = function() CVControl(seed = as.numeric(args[7])))
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
 x <- as.MLModel(ML_fit)
 x <- x@steps
@@ -219,7 +212,7 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
 cat("Successfully ran breakdown model 2\n")
 #i <- i[! i %in% variables_selected]
-cat("Error handled successfully, moving on to next iteration\n")
+cat("Dataset breakdown handled successfully, moving on to next iteration\n")
 },
 finally = {
 i <- i[! i %in% variables_selected]
