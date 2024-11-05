@@ -153,6 +153,7 @@ df_2$Targets <- targets
 cat("Troubleshoot resample control error")
 print(model_dt)
 str(df_2)
+settings(control = function() CVControl(seed = as.numeric(args[7])))
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
 x <- as.MLModel(ML_fit)
 x <- x@steps
