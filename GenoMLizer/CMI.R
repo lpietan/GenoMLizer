@@ -20,14 +20,14 @@ d <- d[,-1]
 rownames(d) <- d1
 d$Targets <- factor(d$Targets)
 
-cat("  *************************   DATASET SUMMARY   *************************  ")
+cat("  *************************   DATASET SUMMARY   *************************  \n")
 str(d) %>% head
 
 t_df <- d[1]
 CMI_dataframe <- t_df
 targets <- t_df$Targets
 i <- 2:length(d)
-cat("Initial index list Complete")
+cat("Initial index list Complete\n")
 
 ## CMI filter for step_sbf()
 cmi_filter <- function(x, y, step) {
@@ -43,7 +43,7 @@ cmi_filter <- function(x, y, step) {
 set.seed(as.numeric(args[4]))
 while (length(i) > 999)
 {
-cat(length(i))
+cat(length(i), "\n")
 variables_selected <- sample(x=i, size=1000)
 df_2 <- d[variables_selected]
 df_2$Targets <- targets
@@ -65,7 +65,7 @@ i <- i[! i %in% variables_selected]
 }
 
 
-cat(length(i))
+cat(length(i), "\n")
 if (length(i) < 999 & length(i) >= as.numeric(args[3])){
 variables_selected <- i
 df_2 <- d[variables_selected]
@@ -108,15 +108,11 @@ df_final <- as.data.frame(CMI_dataframe)
 write.csv(df_final, args[2], row.names = TRUE)
 
 h <- length(df_final)
-cat("Number of selected variables")
-cat(h)
+cat("Number of selected variables\n")
+cat(h, "\n")
 
-print("CMI Filtering Complete")
+cat("CMI Filtering Complete")
 
-if (int(args[6])==1){
-col_names <- colnames(df_final)
-write.csv(col_names, "", row.names=FALSE)
-}
 
 quit(save="no")
 
