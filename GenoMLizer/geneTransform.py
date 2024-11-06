@@ -14,7 +14,7 @@ def main():
 	df1_transposed.to_csv("transposed.csv")
 
 	script_path = pkg_resources.resource_filename('GenoMLizer', 'geneSetup.sh')
-	subprocess.run(['bash', script_path, "transposed.csv", check=True)
+	subprocess.run(['bash', script_path, "transposed.csv"], check=True)
 
 	binVar = int(sys.argv[3]) ##25000
 	binThreshold = binVar + 1
