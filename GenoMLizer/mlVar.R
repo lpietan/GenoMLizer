@@ -106,7 +106,7 @@ x <- print(as.MLModel(ML_fit_dt_full_pipeline), n = Inf, width = Inf)
 cat("DT test performance\n")
 obs_test_dt <- response(ML_fit_dt_full_pipeline, newdata = d_test_dt_rf)
 pred_test_prob_dt <- predict(ML_fit_dt_full_pipeline, newdata = d_test_dt_rf, type = "prob")
-performance(obs_test_dt, pred_test_prob_dt)
+(performance(obs_test_dt, pred_test_prob_dt))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -144,7 +144,7 @@ x <- print(as.MLModel(ML_fitRF), n = Inf, width = Inf)
 cat("RF test performance\n")
 obs_test <- response(ML_fitRF, newdata = d_test_dt_rf)
 pred_test_prob <- predict(ML_fitRF, newdata = d_test_dt_rf, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -180,7 +180,7 @@ x <- print(as.MLModel(ML_fitL), n = Inf, width = Inf)
 cat("lasso test performance\n")
 obs_test <- response(ML_fitL, newdata = d_test)
 pred_test_prob <- predict(ML_fitL, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -216,7 +216,7 @@ x <- print(as.MLModel(ML_fitNB), n = Inf, width = Inf)
 cat("NB test performance\n")
 obs_test <- response(ML_fitNB, newdata = d_test)
 pred_test_prob <- predict(ML_fitNB, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -252,7 +252,7 @@ x <- print(as.MLModel(ML_fitSVML), n = Inf, width = Inf)
 cat("SVM linear test performance\n")
 obs_test <- response(ML_fitSVML, newdata = d_test)
 pred_test_prob <- predict(ML_fitSVML, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -288,7 +288,7 @@ x <- print(as.MLModel(ML_fitSVMP), n = Inf, width = Inf)
 cat("SVM poly test performance\n")
 obs_test <- response(ML_fitSVMP, newdata = d_test)
 pred_test_prob <- predict(ML_fitSVMP, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -323,7 +323,7 @@ x <- print(as.MLModel(ML_fit_SVM_rad), n = Inf, width = Inf)
 cat("SVM rad basis test performance\n")
 obs_test <- response(ML_fit_SVM_rad, newdata = d_test)
 pred_test_prob <- predict(ML_fit_SVM_rad, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -358,7 +358,7 @@ x <- print(as.MLModel(ML_fit_XGBTree), n = Inf, width = Inf)
 cat("XGBTree test performance\n")
 obs_test <- response(ML_fit_XGBTree, newdata = d_test)
 pred_test_prob <- predict(ML_fit_XGBTree, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -393,7 +393,7 @@ x <- print(as.MLModel(ML_fit_net), n = Inf, width = Inf)
 cat("Elasticnet test performance\n")
 obs_test <- response(ML_fit_net, newdata = d_test)
 pred_test_prob <- predict(ML_fit_net, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -436,7 +436,7 @@ x <- print(as.MLModel(ML_fit_log_reg), n = Inf, width = Inf)
 cat("Log reg test performance\n")
 obs_test <- response(ML_fit_SVM_rad, newdata = d_test)
 pred_test_prob <- predict(ML_fit_SVM_rad, newdata = d_test, type = "prob")
-performance(obs_test, pred_test_prob)
+(performance(obs_test, pred_test_prob))
 
 x <- x@steps
 x_ts <- x$TrainingStep1
