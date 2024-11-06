@@ -419,9 +419,9 @@ write.csv(vi_df, file_enet_csv, row.names=TRUE)
 
 
 cat("Training Metrics (without Log Reg)\n")
-cat(final_train_metric_df)
+print(final_train_metric_df)
 cat("Testing Metrics (without Log Reg)\n")
-cat(final_test_metric_df)
+print(final_test_metric_df)
 
 write.csv(final_train_metric_df, file_out_train, row.names=TRUE, quote = FALSE)
 write.csv(final_test_metric_df, file_out_test, row.names=TRUE, quote = FALSE)
@@ -462,9 +462,9 @@ write.csv(vi_df, file_logReg_csv, row.names=TRUE)
 
 
 cat("Training Metrics\n")
-cat(final_train_metric_df)
+print(final_train_metric_df)
 cat("Testing Metrics\n")
-cat(final_test_metric_df)
+print(final_test_metric_df)
 
 
 write.csv(final_train_metric_df, file_out_train, row.names=TRUE, quote = FALSE)
