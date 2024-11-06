@@ -12,7 +12,7 @@ args <- commandArgs(trailingOnly = TRUE)
 library(doSNOW)
 registerDoSNOW(makeCluster(as.numeric(args[5])))
 
-settings(control = function() CVControl(seed = as.numeric(args[4])))
+settings(control = CVControl(seed = as.numeric(args[4])))
 
 ## Load train data
 d_train <- read_csv(args[1])
