@@ -30,11 +30,7 @@ setup(
 		'pandas>=1.5.0',
 		'numpy>=1.21.5',
 		'vcf_parser',
-		'rpy2'
 	],
-	extras_require={
-		'R': ['rpy2']
-	},
 	python_requires='>=3.9',
 	options={'install': {'user': True}}
 )
