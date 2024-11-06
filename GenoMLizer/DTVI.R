@@ -142,10 +142,14 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 },
 error = function(e){
 cat("Initial decision tree outside of parameters, breaking down dataset to proceed\n")
-var_half <- as.numeric(args[5])/2
+var_half <- floor(as.numeric(args[5])/2)
 var_half1 <- var_half+1
+# Clear some memory before splitting
+gc()
 variables_selected_1 <- variables_selected[1:var_half]
 variables_selected_2 <- variables_selected[(var_half1):as.numeric(args[5])]
+# Process first half
+tryCatch({
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
@@ -178,7 +182,15 @@ VI_dataset <- select(df_2, all_of(newSelectedVariables))
 ## Add selected variable to final dataset
 varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
+rm(df_2, ML_fit)
+gc()
 cat("Successfully ran breakdown model 1\n")
+}, error = function(e) {
+cat("Error in first half:", conditionMessage(e), "\n")
+})
+
+# Process second half
+tryCatch({
 df_2 <- d[variables_selected_2]
 df_2$Targets <- targets
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
@@ -210,12 +222,16 @@ VI_dataset <- select(df_2, all_of(newSelectedVariables))
 ## Add selected variable to final dataset
 varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
+rm(df_2, ML_fit)
+gc()
 cat("Successfully ran breakdown model 2\n")
-#i <- i[! i %in% variables_selected]
-cat("Dataset breakdown handled successfully, moving on to next iteration\n")
+}, error = function(e) {
+cat("Error in second half:", conditionMessage(e), "\n")
+})
 },
 finally = {
 i <- i[! i %in% variables_selected]
+gc()
 }
 )
 }
