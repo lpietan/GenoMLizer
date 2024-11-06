@@ -34,7 +34,7 @@ setup(
 	],
 	extras_require={
 		'R': ['rpy2']
-	}
+	},
 	python_requires='>=3.9',
 	options={'install': {'user': True}}
 )
