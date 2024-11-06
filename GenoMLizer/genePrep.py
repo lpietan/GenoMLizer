@@ -38,7 +38,7 @@ def main():
 				f.write(line)
 
 	script_path = pkg_resources.resource_filename('GenoMLizer', 'geneSetup.sh')
-	subprocess.run(['bash', script_path, "test_temp2.csv", check=True)
+	subprocess.run(['bash', script_path, "test_temp2.csv"], check=True)
 
 	binVar = int(sys.argv[4]) ##25000
 	binThreshold = binVar + 1
