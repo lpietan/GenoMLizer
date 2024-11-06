@@ -204,7 +204,7 @@ def main():
 			finCADDVar = CADDDF.sum(axis = 0).tolist()
 			lineFix = varNameCADD + j.join(map(str, finCADDVar)) + '\n'
 			f.write(lineFix)
-		if sys.argv[3] == "SFC" or sys.argv[3] == "DC":
+		if sys.argv[4] == "SFC" or sys.argv[4] == "DC":
 			with open("variables_corrected.csv", "w") as f2:		
 				lineIndexListFix = j.join(map(str, testSetIndex)) + "\n"
 				lineAltListFix = j.join(map(str, testSetAlt))
