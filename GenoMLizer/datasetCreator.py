@@ -2,6 +2,7 @@
 
 ## dependencies 
 from vcf_parser import VCFParser
+import numpy
 import pandas as pd
 import csv
 import sys
