@@ -24,7 +24,7 @@ d_train$Targets <- factor(d_train$Targets)
 
 if (as.numeric(args[3]) == 1){
 col_names <- which(grepl("Allele", names(d_train)))
-d_train[,col_names] <- lapply(d_train[,col_names] , factor)
+d_train[,col_names] <- lapply(d_train[,col_names] , factor, levels = c(0,1))
 }
 
 
@@ -39,7 +39,7 @@ rownames(d_test) <- d1
 d_test$Targets <- factor(d_test$Targets)
 if (as.numeric(args[3]) == 1){
 col_names <- which(grepl("Allele", names(d_test)))
-d_test[,col_names] <- lapply(d_test[,col_names] , factor)
+d_test[,col_names] <- lapply(d_test[,col_names] , factor, levels = c(0,1))
 }
 
 d_test_dt_rf <- d_test
