@@ -27,10 +27,12 @@ setup(
         	'GenoMLizer': ['*.sh', '*.R'],
 	},
 	install_requires=[
-		'pandas',
-		'numpy',
+		'pandas>=1.5.0',
+		'numpy>=1.21.5',
 		'vcf_parser'
 	]
+	python_requires='>=3.9',
+	options={'install': {'user': True}}
 )
 
 
