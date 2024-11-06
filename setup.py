@@ -28,6 +28,7 @@ setup(
 	},
 	install_requires=[
 		'pandas',
+		'numpy',
 		'vcf_parser'
 	]
 )
