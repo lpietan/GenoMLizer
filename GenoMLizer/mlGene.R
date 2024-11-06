@@ -44,7 +44,7 @@ varNames_df$keyNames <- keyNames
 write.csv(as.data.frame(varNames_df), "variableKeys_gene_ML_train_dt_rf.csv", row.names = FALSE)
 
 varNames <- variable.names(d_test_dt_rf)
-keys <- read.csv(args[3])
+keys <- read.csv("variableKeys_gene_ML_train_dt_rf.csv")
 # Iterate through each row in the keys dataframe and rename columns
 for (i in 1:nrow(keys)) {
   old_name <- keys[i, "variableNames"]
