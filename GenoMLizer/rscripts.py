@@ -3,6 +3,7 @@
 import subprocess
 import sys
 import psutil
+import os
 import GenoMLizer
 
 def get_default_ppsize():
