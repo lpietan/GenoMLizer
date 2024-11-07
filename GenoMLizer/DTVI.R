@@ -238,6 +238,7 @@ gc()
 
 cat(length(i), "\n")
 if (length(i) > 0){
+tryCatch({
 variables_selected <- i
 df_2 <- d[variables_selected]
 df_2$Targets <- targets
@@ -272,10 +273,98 @@ VI_dataset <- select(df_2, all_of(newSelectedVariables))
 ## Add selected variable to final dataset
 varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
+},
+error = function(e) {
+cat("Error in dataset processing, breaking down dataset to proceed\n")
+# Calculate midpoint
+var_half <- floor(length(variables_selected)/2)
+var_half1 <- var_half + 1
+        
+# Process first half
+tryCatch({
+variables_selected_1 <- variables_selected[1:var_half]
+df_2 <- d[variables_selected_1]
+df_2$Targets <- targets
+ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
+x <- as.MLModel(ML_fit)
+x <- x@steps
+x_ts <- x$TrainingStep1
+x_ts_log <- x_ts@log
+x_ts_log_sel <- x_ts_log$selected
+metrics_df <- as.data.frame(x_ts_log_sel)
+x_ts_log_met <- x_ts_log$metrics
+metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
+r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
+
+## selection by accuracy metric, can be set to other metrics here. If changed make sure to change below code to match.
+perf_Acc <- r[["accuracy"]]
+
+## if state to perform vi and keep variables 
+if (perf_Acc > acc_thresh) {
+## relative importance of included predictor variables
+vi <- varimp(ML_fit)
+colnames(vi) <- c('score')
+selectVI <- vi[1] > 0
+selectedVI <- as.data.frame(selectVI) %>% filter(score == TRUE)
+selectedVariables <- row.names(selectedVI)
+
+newSelectedVariables = setdiff(selectedVariables, colnames(varImp_dataframe))
+
+VI_dataset <- select(df_2, all_of(newSelectedVariables))
+
+## Add selected variable to final dataset
+varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
+rm(df_2, ML_fit)
+gc()
+cat("Successfully ran breakdown model 1\n")
+}, error = function(e) {
+cat("Error in first half:", conditionMessage(e), "\n")
+})
+tryCatch({
+variables_selected_2 <- variables_selected[var_half1:length(variables_selected)]
+df_2 <- d[variables_selected_2]
+df_2$Targets <- targets
+ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
+x <- as.MLModel(ML_fit)
+x <- x@steps
+x_ts <- x$TrainingStep1
+x_ts_log <- x_ts@log
+x_ts_log_sel <- x_ts_log$selected
+metrics_df <- as.data.frame(x_ts_log_sel)
+x_ts_log_met <- x_ts_log$metrics
+metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
+r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
+
+perf_Acc <- r[["accuracy"]]
+
+## if state to perform vi and keep variables 
+if (perf_Acc > acc_thresh) {
+## relative importance of included predictor variables
+vi <- varimp(ML_fit)
+colnames(vi) <- c('score')
+selectVI <- vi[1] > 0
+selectedVI <- as.data.frame(selectVI) %>% filter(score == TRUE)
+selectedVariables <- row.names(selectedVI)
+
+newSelectedVariables = setdiff(selectedVariables, colnames(varImp_dataframe))
+
+VI_dataset <- select(df_2, all_of(newSelectedVariables))
+
+## Add selected variable to final dataset
+varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
+}
+rm(df_2, ML_fit)
+gc()
+cat("Successfully ran breakdown model 2\n")
+}, error = function(e) {
+cat("Error in second half:", conditionMessage(e), "\n")
+}) 
+}
+)
 i <- 2:length(d)
 }
-
+}
 ## Save results
 d <- as.data.frame(varImp_dataframe)
 
