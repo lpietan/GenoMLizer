@@ -427,6 +427,7 @@ write.csv(final_train_metric_df, file_out_train, row.names=TRUE, quote = FALSE)
 write.csv(final_test_metric_df, file_out_test, row.names=TRUE, quote = FALSE)
 
 cat("Log Reg\n")
+tryCatch({
 model_log_reg <- TunedModel(GLMModel)
 print(model_log_reg)
 ML_fit_log_reg <- fit(Targets ~ ., data = d_train, model = model_log_reg)
@@ -460,16 +461,18 @@ dev.off()
 vi_df <- as.data.frame(vi)
 write.csv(vi_df, file_logReg_csv, row.names=TRUE)
 
-
 cat("Training Metrics\n")
 print(final_train_metric_df)
 cat("Testing Metrics\n")
 print(final_test_metric_df)
 
-
 write.csv(final_train_metric_df, file_out_train, row.names=TRUE, quote = FALSE)
 write.csv(final_test_metric_df, file_out_test, row.names=TRUE, quote = FALSE)
+}, error = function(e) {
+    cat("Warning: Logistic Regression encountered an error:", conditionMessage(e), "\n")
+})
+  
 
-cat("Finished successfully")
+cat("ML analysis finished successfully")
 
 quit(save="no")
