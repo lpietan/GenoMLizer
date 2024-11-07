@@ -22,7 +22,7 @@ def run_rscript(script_name, args, ppsize=None):
     """Generic R script runner with configurable ppsize"""
     cmd = ['Rscript']
     if ppsize:
-        cmd.extend(['--max-ppsize', str(ppsize)])
+        cmd.extend(['--max-ppsize=', str(ppsize)])
     cmd.extend([f'GenoMLizer/{script_name}'] + args)
     print(f"Executing command: {' '.join(cmd)}")  # Added this line
     subprocess.run(cmd, check=True)
