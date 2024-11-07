@@ -4,6 +4,7 @@ import subprocess
 import sys
 import psutil
 import os
+import pkg_resources
 import GenoMLizer
 
 def get_default_ppsize():
@@ -19,11 +20,11 @@ def get_default_ppsize():
         return 500000
 
 def run_rscript(script_name, args, ppsize=None):
-    """Generic R script runner with configurable ppsize"""
+    script_path = pkg_resources.resource_filename('GenoMLizer', script_name)
     cmd = ['Rscript']
     if ppsize:
         cmd.extend([f'--max-ppsize={str(ppsize)}'])
-    cmd.extend([f'GenoMLizer/{script_name}'] + args)
+    cmd.extend([script_path] + args)
     print(f"Executing command: {' '.join(cmd)}")  # Added this line
     subprocess.run(cmd, check=True)
 
