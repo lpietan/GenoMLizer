@@ -6,12 +6,7 @@ A machine learning pipeline for prioritizing variants as genetic modifiers of ra
 
 The goal of GenoMLizer is to help identify and prioritize genomic variants associated with disesase, specifically genetic modifiers of rare disorder.
 
-GenoMLizer takes in variant data from whole genome or exome squencing in a VCF file and performs feature selection using several available techniques that are optimizable to each analysis, and then assesses the variants (features) ability to predict disease/symptome/phenotype status by fitting several machine learning models. The output of GenoMLizer includes predictive performance metrics for each model tested, along with a permutation-based variable importance assessment for each model's variables. GenoMLizer can perform a variant assessment by utilzing the variant variables for model fitting or a gene assesment by binning the variant variables into gene regions and utilizing the gene variables for model fitting. Feature selection can be performed on either variant or gene variables. 
-
-dataset creation with robust and reproducible ml analysis 
-dataset split 
-model hyperparameter tuning with 10-fold cv
-
+GenoMLizer takes in variant data from whole genome or exome squencing in a VCF file and performs feature selection using several available techniques that are optimizable to each analysis, and then assesses the variant's (feature's) ability to predict disease/symptome/phenotype status by fitting several machine learning models. The output of GenoMLizer includes predictive performance metrics for each model tested, along with a permutation-based variable importance assessment for each model's variables. The GenoMLizer pipeline creates and formats two allele features (one for each allele) and two CADD features (using the CADD score of the variant) per variant to construct the initial dataset that then goes through a robust and reproducible protocol with an 80/20 training and test set split, feature selection and transformations, machine learning model hyperparameter tuning and model selection with 10-fold cross validation, and final testing of models on a true held-out test set. GenoMLizer can perform a variant assessment by utilzing the variant variables for model fitting or a gene assesment by binning the variant variables into gene regions and utilizing the gene variables for model fitting. Feature selection can be performed on either variant or gene variables. 
 
 Available feature selection algorithms
 * CMI - Conditional Mutual Information Maximization Filtering
@@ -30,6 +25,15 @@ Available machine learning models
 * Support Vector Machine with Polynomial kernel function (SVM-P)
 * Support Vector Machine with Radial Basis kernel function (SVM-RB)
 
+More details on GenoMLizer and its performance on a Turner syndrome dataset assessing genetics modifier for the development of a bicuspod aortic valve can be found at the following paper
+```
+Pietan, Lucas, Authors, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “GenoMLizer: Genome-wide Machine Learning Analysis for Genetic Modifiers.” Manuscript in Preparation for the journal Genome Research. 
+```
+
+Initial establishment of the anlysis GenoMLizer was constructed from and its performance on a COVID-19 dataset assessing genetics modifier for the loss of smell and/or taste symptoms can be found at the following paper
+```
+Pietan, Lucas, Elizabeth Phillippi, Marcelo Melo, Hatem El-Shanti, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “Genome-wide Machine Learning Analysis of Anosmia and Ageusia in COVID-19.” Manuscript in Preparation for the journal Bioinformatics. 
+```
 
 
 used pipelines from paper
@@ -48,6 +52,8 @@ publications
 
 
  ## Usage
+
+- datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
 -specific output files
 
