@@ -41,10 +41,6 @@ Pietan, Lucas, Elizabeth Phillippi, Marcelo Melo, Hatem El-Shanti, Brian J Smith
 ```
 
 
-used pipelines from paper
-
-publications
-
 # Getting Started
 
 ## Installation
@@ -63,4 +59,6 @@ publications
 -specific output files
 
  ## Tutorial
+
+ -used pipelines from paper
  
