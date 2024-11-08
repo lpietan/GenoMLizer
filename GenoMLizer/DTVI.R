@@ -85,7 +85,7 @@ model_dt <- TunedModel(
 )
 
 ## Resample control (10-fold, defualt)
-settings(control = CVControl(seed = as.numeric(args[7])), stats.PartialDependence = NULL)
+settings(control = CVControl(seed = as.numeric(args[7])), stats.PartialDependence = "base::mean")
 
 ## Change seed for different random intermidiate dataset selections.
 sseed <- as.numeric(args[7]) - 1
