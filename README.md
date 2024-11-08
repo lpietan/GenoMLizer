@@ -25,7 +25,7 @@ Available machine learning models
 * Support Vector Machine with Polynomial kernel function (SVM-P)
 * Support Vector Machine with Radial Basis kernel function (SVM-RB)
 
-More details on GenoMLizer and its performance on a Turner syndrome dataset assessing genetics modifier for the development of a bicuspod aortic valve can be found at the following paper
+More details on GenoMLizer and its performance on a Turner syndrome dataset assessing genetics modifier for the development of a bicuspid aortic valve can be found in the following paper. If you use GenoMLizer in your publication, please cite the following paper.
 ```
 
 Pietan, Lucas, Authors, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “GenoMLizer: Genome-wide Machine Learning Analysis for Genetic Modifiers.” Manuscript in Preparation for the journal Genome Research.
@@ -45,7 +45,26 @@ Pietan, Lucas, Elizabeth Phillippi, Marcelo Melo, Hatem El-Shanti, Brian J Smith
 
 ## Installation
 
--install procedure
+Installation of GenoMLizer and its dependencies can be done with the following commands. Bcftools is a requirement. The following script will check for installation, but not install. BCFtools will need to be installed manually, if needed. 
+```
+
+# Current setup and examples files
+git clone https://github.com/lpietan/GenoMLizerSetup.git
+
+cd GenoMLizerSetup
+
+# Run install script
+bash install.sh
+
+```
+If the above command do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
+```
+
+
+
+```
+
+
 -requirements
   -mention if install does not work will have to meet requirements another way such as virtual environment with conda
 -bcftools
