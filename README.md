@@ -17,9 +17,9 @@ models
 
 publications
 
-## Getting Started
+# Getting Started
 
-# Installation
+## Installation
 
 -install procedure
 -requirements
@@ -28,8 +28,8 @@ publications
 -vep process with example 
 
 
- # Usage
+ ## Usage
 
 
- # Tutorial
+ ## Tutorial
  
