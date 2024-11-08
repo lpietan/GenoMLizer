@@ -60,15 +60,30 @@ bash install.sh
 If the above command do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
 ```
 
-                   Python Requirements      R Requirments    
-Python >= 3.9      pandas>=1.5.0            MachineShop
-R ≥ 4.1.0          numpy>=1.21.5            
-                   vcf_parser
-                   psutil
+                   Python Requirements          R Requirments    
+Python >= 3.9      pandas>=1.5.0            MachineShop  e1071
+R ≥ 4.1.0          numpy>=1.21.5            praznik      tree
+                   vcf_parser               doSNOW       randomForest
+                   psutil                   dplyr        xgboost
+                                            readr
 
 ```
+Please refer to each package documentation for installation directions and individual requirements. Installation of R packages can be done with the following code. 
+```R
 
+# Example of R package installation
+install.packages("MachineShop")
+# Check installation and load package
+library(MachineShop)
 
+```
+Installation of Pyhton requirments in a virtual environment using conda is an option and can be done with the following code. 
+```Python
+
+conda create -n genomlizer_env python=3.9 r-base=4.1.0 numpy=1.21.5 pandas=1.5.0
+conda activate genomlizer_env
+
+```
 -requirements
   -mention if install does not work will have to meet requirements another way such as virtual environment with conda
 -bcftools
