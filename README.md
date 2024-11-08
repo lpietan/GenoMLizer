@@ -1,4 +1,7 @@
 # GenoMLizer
+================
+
+# Desciption
 A machine learning pipeline for prioritizing variants as genetic modifiers of rare disorders.
 
 The goal of GenoMLizer is to help identify and prioritize genomic variants associated with disesase, specifically genetic modifiers of rare disorder.
