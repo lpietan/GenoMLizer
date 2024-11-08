@@ -169,7 +169,7 @@ vi_df <- as.data.frame(vi)
 write.csv(vi_df, file_rf_csv, row.names=TRUE)
 
 
-cat("lasso\n")
+cat("Lasso\n")
 modelL <- TunedModel(GLMNetModel(alpha = 1), grid = c(lambda = 5))
 print(modelL)
 ML_fitL <- fit(Targets ~ ., data = d_train, model = modelL)
@@ -192,10 +192,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["lasso"] <- as.data.frame(r)
+final_train_metric_df["Lasso"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["lasso"] <- as.numeric(as.vector(per))
+final_test_metric_df["Lasso"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fitL, samples = 25)
 pdf(file_lasso_plot)
@@ -264,10 +264,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["SVM Linear"] <- as.data.frame(r)
+final_train_metric_df["SVM-L"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["SVM Linear"] <- as.numeric(as.vector(per))
+final_test_metric_df["SVM-L"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fitSVML, samples = 25)
 pdf(file_svmLin_plot)
@@ -277,7 +277,7 @@ vi_df <- as.data.frame(vi)
 write.csv(vi_df, file_svmLin_csv, row.names=TRUE)
 
 
-cat("SVM Poly\n")
+cat("SVM Polynomial\n")
 modelSVMP <- TunedModel(SVMPolyModel, grid = expand_params(C = c(0.05,0.25,1,4,16,20), degree = as.integer(c(1,2,3,4,5)), scale = c(0.001,0.0012,0.015,0.17,1,2)))
 print(modelSVMP)
 ML_fitSVMP <- fit(Targets ~ ., data = d_train, model = modelSVMP)
@@ -300,10 +300,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["SVM Poly"] <- as.data.frame(r)
+final_train_metric_df["SVM-P"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["SVM Poly"] <- as.numeric(as.vector(per))
+final_test_metric_df["SVM-P"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fitSVMP, samples = 25)
 pdf(file_svmPoly_plot)
@@ -313,7 +313,7 @@ vi_df <- as.data.frame(vi)
 write.csv(vi_df, file_svmPoly_csv, row.names=TRUE)
 
 
-cat("SVM radial basis\n")
+cat("SVM Radial Basis\n")
 model_SVM_rad <- TunedModel(SVMRadialModel, grid = expand_params(C = c(0.05,0.25,1,4,16,20), sigma = c(0.01,0.03,0.05,0.07,0.09,0.1)))
 print(model_SVM_rad)
 ML_fit_SVM_rad <- fit(Targets ~ ., data = d_train, model = model_SVM_rad)
@@ -335,10 +335,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["SVM radial basis"] <- as.data.frame(r)
+final_train_metric_df["SVM-RB"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["SVM radial basis"] <- as.numeric(as.vector(per))
+final_test_metric_df["SVM-RB"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fit_SVM_rad, samples = 25)
 pdf(file_svmRB_plot)
@@ -370,10 +370,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["XGBTreeModel"] <- as.data.frame(r)
+final_train_metric_df["XGBTree"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["XGBTreeModel"] <- as.numeric(as.vector(per))
+final_test_metric_df["XGBTree"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fit_XGBTree, samples = 25)
 pdf(file_xgbt_plot)
@@ -383,7 +383,7 @@ vi_df <- as.data.frame(vi)
 write.csv(vi_df, file_xgbt_csv, row.names=TRUE)
 
 
-cat("Elasticnet\n")
+cat("Elastic Net\n")
 model_net <- TunedModel(GLMNetModel, grid = 5)
 print(model_net)
 ML_fit_net <- fit(Targets ~ ., data = d_train, model = model_net)
@@ -405,10 +405,10 @@ metrics_df <- cbind(metrics_df,as.data.frame(x_ts_log_met))
 r <- metrics_df[metrics_df$x_ts_log_sel == TRUE,]
 r <- as.numeric(as.vector(r))
 r <- r[2:7]
-final_train_metric_df["Elasticnet"] <- as.data.frame(r)
+final_train_metric_df["EN"] <- as.data.frame(r)
 
 per <- performance(obs_test, pred_test_prob)
-final_test_metric_df["Elasticnet"] <- as.numeric(as.vector(per))
+final_test_metric_df["EN"] <- as.numeric(as.vector(per))
 
 vi <- varimp(ML_fit_net, samples = 25)
 pdf(file_enet_plot)
@@ -426,7 +426,7 @@ print(final_test_metric_df)
 write.csv(final_train_metric_df, file_out_train, row.names=TRUE, quote = FALSE)
 write.csv(final_test_metric_df, file_out_test, row.names=TRUE, quote = FALSE)
 
-cat("Log Reg\n")
+cat("Logistic Regression\n")
 tryCatch({
 model_log_reg <- TunedModel(GLMModel)
 print(model_log_reg)
