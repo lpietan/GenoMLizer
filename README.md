@@ -32,6 +32,7 @@ Pietan, Lucas, Authors, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas 
 
 ```
 
+
 Initial establishment of the anlysis GenoMLizer was constructed from and its performance on a COVID-19 dataset assessing genetics modifier for the loss of smell and/or taste symptoms can be found at the following paper
 ```
 
