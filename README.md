@@ -63,7 +63,7 @@ With the install, example files will be downloaded to test the installation. The
                    Python Requirements          R Requirments    
 Python >= 3.9      pandas>=1.5.0            MachineShop  e1071
 R ≥ 4.1.0          numpy>=1.21.5            praznik      tree
-                   vcf_parser               doSNOW       randomForest
+BCFtools           vcf_parser               doSNOW       randomForest
                    psutil                   dplyr        xgboost
                                             readr
 
@@ -77,21 +77,22 @@ install.packages("MachineShop")
 library(MachineShop)
 
 ```
-Installation of Pyhton requirments in a virtual environment using conda is an option and can be done with the following code. 
+Installation of Python requirments in a virtual environment using conda is an option and can be done with the following code. BCFtools can also be installed with conda, if not already installed. 
 ```Python
 
+# Create conda environment with requirements
 conda create -n genomlizer_env python=3.9 r-base=4.1.0 numpy=1.21.5 pandas=1.5.0
+# Activate environment
 conda activate genomlizer_env
+# Example install of bcftools with conda
+conda install -c bioconda bcftools
 
 ```
--requirements
-  -mention if install does not work will have to meet requirements another way such as virtual environment with conda
--bcftools
--vep process with example 
 
 
  ## Usage
 
+-vep process with example 
 - datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
 -specific output files
