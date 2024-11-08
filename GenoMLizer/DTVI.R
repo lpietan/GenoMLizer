@@ -142,7 +142,13 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 #i <- i[! i %in% variables_selected]
 },
 error = function(e){
-cat("Initial decision tree outside of parameters, breaking down dataset to proceed\n")
+cat("Initial decision tree outside of parameters, breaking down dataset to proceed:", conditionMessage(e), "\n")
+
+# Restart clusters
+closeAllConnections()
+gc(full = TRUE)
+registerDoSNOW(makeCluster(as.numeric(args[8])))
+  
 var_half <- floor(as.numeric(args[5])/2)
 print("var_half variable")
 print(var_half)
