@@ -57,7 +57,7 @@ cd GenoMLizerSetup
 bash install.sh
 
 ```
-If the above command do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
+With the install, example files will be downloaded to test the installation. These files are used in the [Tutorial](#tutorial) below. If the above commands do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
 ```
 
                    Python Requirements          R Requirments    
