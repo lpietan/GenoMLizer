@@ -149,7 +149,8 @@ gc()
 variables_selected_1 <- variables_selected[1:var_half]
 variables_selected_2 <- variables_selected[(var_half1):as.numeric(args[5])]
 # Process first half
-tryCatch({
+tryCatch(
+expr = {
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
@@ -190,7 +191,8 @@ cat("Error in first half:", conditionMessage(e), "\n")
 })
 
 # Process second half
-tryCatch({
+tryCatch(
+expr = {
 df_2 <- d[variables_selected_2]
 df_2$Targets <- targets
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
@@ -238,7 +240,8 @@ gc()
 
 cat(length(i), "\n")
 if (length(i) > 0){
-tryCatch({
+tryCatch(
+expr = {
 variables_selected <- i
 df_2 <- d[variables_selected]
 df_2$Targets <- targets
@@ -281,7 +284,8 @@ var_half <- floor(length(variables_selected)/2)
 var_half1 <- var_half + 1
         
 # Process first half
-tryCatch({
+tryCatch(
+expr = {
 variables_selected_1 <- variables_selected[1:var_half]
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
@@ -321,7 +325,8 @@ cat("Successfully ran breakdown model 1\n")
 }, error = function(e) {
 cat("Error in first half:", conditionMessage(e), "\n")
 })
-tryCatch({
+tryCatch(
+expr = {
 variables_selected_2 <- variables_selected[var_half1:length(variables_selected)]
 df_2 <- d[variables_selected_2]
 df_2$Targets <- targets
