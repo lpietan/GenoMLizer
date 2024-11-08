@@ -60,7 +60,10 @@ bash install.sh
 If the above command do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
 ```
 
-
+pandas>=1.5.0    
+numpy>=1.21.5
+vcf_parser
+psutil
 
 ```
 
