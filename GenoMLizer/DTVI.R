@@ -75,7 +75,7 @@ acc_thresh = majCl
 model_dt <- TunedModel(
   TreeModel,
   metrics = c(accuracy),
-  control = CVControl(seed = as.numeric(args[7]), stats = c("predictions", "performance")),
+  control = CVControl(seed = as.numeric(args[7])),
   grid = expand_params(
     mincut = c(5,6),
     minsize = c(10,15),
@@ -85,7 +85,7 @@ model_dt <- TunedModel(
 )
 
 ## Resample control (10-fold, defualt)
-settings(control = CVControl(seed = as.numeric(args[7])))
+settings(control = CVControl(seed = as.numeric(args[7])), stats.PartialDependence = NULL)
 
 ## Change seed for different random intermidiate dataset selections.
 sseed <- as.numeric(args[7]) - 1
