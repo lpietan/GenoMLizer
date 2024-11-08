@@ -71,9 +71,10 @@ majCl <- majorityClass/sampleNumber
 acc_thresh = majCl
 }
 
+## metrics = c(accuracy, brier, kappa2, roc_auc, sensitivity, specificity)
 model_dt <- TunedModel(
   TreeModel,
-  metrics = c(accuracy, brier, kappa2, roc_auc, sensitivity, specificity),
+  metrics = c(accuracy),
   control = CVControl(seed = as.numeric(args[7]), stats = c("predictions", "performance")),
   grid = expand_params(
     mincut = c(5,6),
