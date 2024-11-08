@@ -142,7 +142,7 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 #i <- i[! i %in% variables_selected]
 },
 error = function(e){
-cat("Initial decision tree outside of parameters, breaking down dataset to proceed:", conditionMessage(e), "\n")
+cat("Initial decision tree outside of parameters:", conditionMessage(e), ", breaking down dataset to proceed:\n")
 
 # Restart clusters
 closeAllConnections()
@@ -150,31 +150,17 @@ gc(full = TRUE)
 registerDoSNOW(makeCluster(as.numeric(args[8])))
   
 var_half <- floor(as.numeric(args[5])/2)
-print("var_half variable")
-print(var_half)
 var_half1 <- var_half+1
-print("var_half1 variable")
-print(var_half1)
 # Clear some memory before splitting
 gc()
 variables_selected_1 <- variables_selected[1:var_half]
-print("variables_selected_1 varibale")
-print(variables_selected_1)
 variables_selected_2 <- variables_selected[(var_half1):as.numeric(args[5])]
-print("variables_selected_2 variable")
-print(variables_selected_2)
 # Process first half
 tryCatch(
 expr = {
 df_2 <- d[variables_selected_1]
 df_2$Targets <- targets
-print("first dataset")
-str(df_2)
-print("model_dt")
-print(model_dt)
 ML_fit <- fit(Targets ~ ., data = df_2, model = model_dt)
-print("ML_fit")
-print(ML_fit)
 x <- as.MLModel(ML_fit)
 x <- x@steps
 x_ts <- x$TrainingStep1
@@ -299,7 +285,13 @@ varImp_dataframe <- cbind(varImp_dataframe, VI_dataset)
 }
 },
 error = function(e) {
-cat("Error in dataset processing, breaking down dataset to proceed\n")
+cat("Initial decision tree outside of parameters:", conditionMessage(e), ", breaking down dataset to proceed:\n")
+
+# Restart clusters
+closeAllConnections()
+gc(full = TRUE)
+registerDoSNOW(makeCluster(as.numeric(args[8])))
+
 # Calculate midpoint
 var_half <- floor(length(variables_selected)/2)
 var_half1 <- var_half + 1
