@@ -25,7 +25,6 @@ def run_rscript(script_name, args, ppsize=None):
     if ppsize:
         cmd.extend([f'--max-ppsize={str(ppsize)}'])
     cmd.extend([script_path] + args)
-    print(f"Executing command: {' '.join(cmd)}")  # Added this line
     subprocess.run(cmd, check=True)
 
 def CMI_main():
@@ -39,7 +38,6 @@ def GLM_main():
 
 def DTVI_main():
     ppsize = int(os.environ.get('GENOMLIZER_PPSIZE', get_default_ppsize()))
-    print(f"Using ppsize: {ppsize}")  # Added this line
     run_rscript('DTVI.R', sys.argv[1:], ppsize=ppsize)
 
 def mlVar_main():
