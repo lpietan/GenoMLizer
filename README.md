@@ -164,9 +164,9 @@ Transforms variants from the VCF file to usable ML features. Four variables are 
 
 datasetCreator input.vcf.gz target_file output.csv
 
-   input.vcf.gz   -    preprocessed VCF file
-   target_file    -    a file containing the names of the samples and corresponing phenotype data encoded as 0/1
-   output.csv     -    the name of the output CSV file with the samples and transformed features
+   input.vcf.gz   -    Preprocessed VCF file
+   target_file    -    A file containing the names of the samples and corresponing phenotype data encoded as 0/1
+   output.csv     -    The name of the output CSV file with the samples and transformed features
 
 ```
 Structure of the `target_file`. The heading must be, `sampleNames,Targets`.
@@ -178,6 +178,14 @@ S3,0
 S4,1
 S5,1
 ```
+Example of per variant output variable naming structure
+```
+CHR:POS:GeneSymbol:Allele1
+CHR:POS:GeneSymbol:CADD1
+CHR:POS:GeneSymbol:Allele2
+CHR:POS:GeneSymbol:CADD2
+```
+
 
 #### splitTrainTest
 Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance. splitTrainTest has 3 agruments (order matters).
@@ -185,9 +193,9 @@ Intended to be used after datasetCreator, splitTrainTest performs an 80/20 rando
 
 splitTrainTest input.csv NC_correction_threshold seed
 
-   input.csv                    -      input CSV file, output from datasetCreator
-   NC_correction_threshold      -      numeric value between 0 and 1 (Recommended value 0.8). No call threshold, setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a 0 (reference allele). 
-   seed                         -      integer value, set seed for reproducible split
+   input.csv                    -      Input CSV file, output from datasetCreator
+   NC_correction_threshold      -      Numeric value between 0 and 1 (Recommended value 0.8). No call threshold, setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a 0 (reference allele). 
+   seed                         -      Integer value, set seed for reproducible split
 
 ```
 
@@ -198,39 +206,59 @@ Performs Conditional Mutual Information Maximization Filtering on variant or gen
 
 CMI input.csv output.csv k seed number_of_clusters
 
-   input.csv               -      input CSV file
-   output.csv              -      output CSV file 
-   k                       -      integer value, k number of variables to select from each intermediat dataset
-   seed                    -      integer value, set seed for reproducible output
-   number_of_clusters      -      integer value, number of cluster for parallelization 
+   input.csv               -      Input CSV file
+   output.csv              -      Output CSV file 
+   k                       -      Integer value, k number of variables to select from each intermediat dataset
+   seed                    -      Integer value, set seed for reproducible output
+   number_of_clusters      -      Integer value, number of cluster for parallelization 
 
 ```
 
 #### GLM
-Logistic Regression Filtering 
+Performs Logistic Regression Filtering on variant or gene variables. Perfoms a logistic regression with either a Chi-squared or F test to calulate a p-value for association of the feature (predictor variable) with the target (response variable). GLM has 6 agruments (order matters).
 ```
 
 GLM input.csv output.csv Chisq/F Pvalue_threshold seed number_of_clusters
 
-   input.csv               -      input CSV file
-   output.csv              -      output CSV file 
-   k                       -      integer value, k number of variables to select from each intermediat dataset
-   seed                    -      integer value, set seed for reproducible output
-   number_of_clusters      -      integer value, number of cluster for parallelization 
+   input.csv               -      Input CSV file
+   output.csv              -      Output CSV file 
+   Chisq/F                 -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F test.
+   Pvalue_threshold        -      Numeric value between 0 and 1 (recommended value <= 0.1). P-value treshold for association test. All variables with a p-value less than or equal to threshold will pass the filter. 
+   seed                    -      Integer value, set seed for reproducible output
+   number_of_clusters      -      Integer value, number of cluster for parallelization 
 
 ```
 
 #### DTVI
-Decision Tree Variable Importance Filtering 
+Decision Tree Variable Importance Filtering on variant or gene variables. Breaks the input dataset into user specified number variable intermediate datasets and fits a decision tree model. Hyperparameter tuning and model selection are done with a 10-fold cross validation. If the accuacy of the top decision tree model is greater than or equal to a user specified accuracy threshold, then a permutation-based variable importance assessment is performed. The variables with a variable importance score greater than 0 pass the filter. DTVI has 8 agruments (order matters).
 ```
 
-DTVI input output fac_allele_0/1 ACCThreshold number_of_variables number_of_iterations seed number_of_clusters
+DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables number_of_iterations seed number_of_clusters
+
+   input.csv                  -      Input CSV file
+   output.csv                 -      Output CSV file 
+   allele_factorization       -      Integer value of 0/1. A value of 0 encodes all allele variables as numeric. A value of 1 encodes all allele variables as factor.
+   ACC_threshold              -      Numeric value between 0 and 1 (recommended value >= majority class accuracy). Accuracy trheshold for decision tree model. Setting value equal to 1 will set the accuracy threshold the the majority class accuracy of the input dataset.
+   number_of_variables        -      Integer value, sets the number of variables to include in the intermidiate datasets
+   number_of_iterations       -      Integer value, sets the number of time to filter through the initial input dataset
+   seed                       -      Integer value, set seed for reproducible output
+   number_of_clusters         -      Integer value, number of cluster for parallelization    
 
 ```
-
 
 #### geneTransform
+Transforms variant variables to gene variables. Variants within the same gene annotations are binned. All allele variables are added to create a gene_allele variable and all CADD variables are added to create a gene_CADD variable. geneTransform has 5 agruments (order matters).
+```
 
+geneTransform input.csv output.csv bpRegion correction correction_threshold
+
+   input.csv                  -      Input CSV file
+   output.csv                 -      Output CSV file 
+   bpRegion                   -      Integer value (recommended value 25000). This sets the bin size in base pairs for variants to be binned into regions if the variants do not have a gene symbol annotation.  
+   correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction and transforms variant variable as they are.  SFC' performs a sample allele frequency correction, correction 
+   correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). sets the number of variables to include in the
+
+```
 
 #### varPrep
 
@@ -250,6 +278,7 @@ DTVI input output fac_allele_0/1 ACCThreshold number_of_variables number_of_iter
 
  ## Tutorial
 
+export GENOMLIZER_PPSIZE=500000
  -used pipelines from paper
 
 
@@ -258,4 +287,6 @@ DTVI input output fac_allele_0/1 ACCThreshold number_of_variables number_of_iter
  - dataset creator can handle up 9 alt allele
  - DTVI and ML fitting in ML script need 0/1 encoding for allele variables if selecting factor
  - can perform a custom transformation of variables to 0/1
+ - potentially pp size
+
  
