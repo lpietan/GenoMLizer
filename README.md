@@ -112,7 +112,7 @@ CADD,whole_genome_SNVs.tsv.gz,InDels.tsv.gz \
 
 ```
 
-The 
+The input VCF file should be filtered to variants with only one alternative allele. For additional options for file setup and preparation see the [Advanced Setup](#advanced setup) section. 
 
 Each variant needs to be annotated with a gene symThere needs to be one annotation 
 
@@ -125,4 +125,11 @@ Each variant needs to be annotated with a gene symThere needs to be one annotati
  ## Tutorial
 
  -used pipelines from paper
+
+
+ ## Advanced Setup 
+
+ - dataset creator can handle up 9 alt allele
+ - DTVI and ML fitting in ML script need 0/1 encoding for allele variables if selecting factor
+ - can perform a custom transformation of variables to 0/1
  
