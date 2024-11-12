@@ -112,12 +112,23 @@ CADD,whole_genome_SNVs.tsv.gz,InDels.tsv.gz \
 
 ```
 
-The input VCF file should be filtered to variants with only one alternative allele. For additional options for file setup and preparation see the [Advanced Setup](#advanced-setup) section. 
+The input VCF file should be filtered to variants with only one alternative allele. This can be done with following command using `BCFtools`. For additional options for file setup and preparation see the [Advanced Setup](#advanced-setup) section. 
+```
 
-Each variant needs to be annotated with a gene symThere needs to be one annotation 
+bcftools view -e 'N_ALT>1' -O z -o output.vcf.gz input.vcf.gz
+
+```
+
+The GenoMLizer has the following commands that can be ran from the command line. 
+```
+
+# Initisl Commands    # Feature Selection Commands 
+datasetCreator
+splitTrainTest
 
 
--vep process with example 
+```
+
 - datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
 -specific output files
