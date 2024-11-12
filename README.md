@@ -255,7 +255,7 @@ geneTransform input.csv output.csv bpRegion correction correction_threshold
    input.csv                  -      Input CSV file
    output.csv                 -      Output CSV file 
    bpRegion                   -      Integer value (recommended value 25000). This sets the bin size in base pairs for variants to be binned into regions if the variants do not have a gene symbol annotation.  
-   correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction and transforms variant variable as they are.  SFC' performs a sample allele frequency correction, correction 
+   correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction and transforms variant variable as they are.  SFC' performs a sample allele frequency correction,  
    correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). sets the number of variables to include in the
 
 ```
