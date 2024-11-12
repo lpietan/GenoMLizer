@@ -112,7 +112,7 @@ CADD,whole_genome_SNVs.tsv.gz,InDels.tsv.gz \
 
 ```
 
-The input VCF file should be filtered to variants with only one alternative allele. For additional options for file setup and preparation see the [Advanced Setup](#advanced setup) section. 
+The input VCF file should be filtered to variants with only one alternative allele. For additional options for file setup and preparation see the [Advanced Setup](#advanced) section. 
 
 Each variant needs to be annotated with a gene symThere needs to be one annotation 
 
