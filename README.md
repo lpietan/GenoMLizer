@@ -92,6 +92,9 @@ conda install -c bioconda bcftools
 
  ## Usage
 
+GenoMLizer takes in a joint called or merged VCF file with all samples and genotypes in the same file and requires the variants to be annotated with `VEP`.  
+
+
 -vep process with example 
 - datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
