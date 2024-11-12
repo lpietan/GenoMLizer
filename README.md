@@ -179,7 +179,40 @@ S4,1
 S5,1
 ```
 
-- datsetCreator - add specifics about allele and cadd variables
+#### splitTrainTest
+Intended to be used after datasetCreator, splitTrainTest performs an 80/20 split of the dataset. 80% of the 
+```
+
+
+
+```
+
+
+#### CMI
+
+
+#### GLM
+
+
+#### DTVI
+
+
+#### geneTransform
+
+
+#### varPrep
+
+
+#### genePrep
+
+
+#### mlVar
+
+
+#### mlGene
+
+
+
 -commands and args and descriptions 
 -specific output files
 
