@@ -291,21 +291,40 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
 ```
 
 #### mlVar
-Performs model fitting and testing with the ML models mentioned above for variant . For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files '' and '' respectively  and included in the output file 
+Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model. mlVar has 6 agruments (order matters).
 ```
 
-mlVar train test fac_allele_0/1 prefix seed number_of_clusters
+mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_clusters
+
+   input_Train.csv            -         Training input CSV file
+   input_Test.csv             -         Test input CSV file
+   allele_factorization       -         Integer value of 0/1. A value of 0 encodes all allele variables as numeric. A value of 1 encodes all allele variables as factor.
+   prefix                     -         Prefix for output files
+   seed                       -         Integer value, set seed for reproducible output
+   number_of_clusters         -         Integer value, number of cluster for parallelization 
 
 ```
 
 #### mlGene
+Performs the same function as mlVar but for gene variables. mlGene has 5 agruments (order matters).
 
+```
 
+mlGene input_Train.csv input_Test.csv prefix seed number_of_clusters
 
--commands and args and descriptions 
--specific output files
+   input_Train.csv            -         Training input CSV file
+   input_Test.csv             -         Test input CSV file
+   prefix                     -         Prefix for output files
+   seed                       -         Integer value, set seed for reproducible output
+   number_of_clusters         -         Integer value, number of cluster for parallelization
+
+```
+
 
  ## Tutorial
+Two sets of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory ().  
+
+In our studies mentioned above we found the best performance with our datasets to be with the following pipelines
 
 export GENOMLIZER_PPSIZE=500000
  -used pipelines from paper
@@ -317,5 +336,7 @@ export GENOMLIZER_PPSIZE=500000
  - DTVI and ML fitting in ML script need 0/1 encoding for allele variables if selecting factor
  - can perform a custom transformation of variables to 0/1
  - potentially pp size
+
+- potentially troubleshooting section with warning and errors
 
  
