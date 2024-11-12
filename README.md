@@ -92,7 +92,29 @@ conda install -c bioconda bcftools
 
  ## Usage
 
-GenoMLizer takes in a joint called or merged VCF file with all samples and genotypes in the same file and requires the variants to be annotated with `VEP`.  
+GenoMLizer takes in a joint called or merged VCF file with all samples and genotypes in the same file and requires the variants to be annotated with Ensembl's `VEP` (Variant Effect Predictor). The VCF file needs only one annotation per variant and to have a variant annotation for gene symbol and for the varaint's CADD score. This can be accomplished with the following command.
+```
+
+# Example VEP command
+vep \
+--assembly GRCh38 \
+--cache \
+--merged \
+--plugin \
+CADD,whole_genome_SNVs.tsv.gz,InDels.tsv.gz \
+--pick_allele \
+--symbol \
+--vcf \
+--fasta /homo_sapiens_merged/Homo_sapiens.GRCh38.dna.toplevel.fa.gz \
+-i input.vcf.gz \
+-o out.vcf.gz \
+-offline
+
+```
+
+The 
+
+Each variant needs to be annotated with a gene symThere needs to be one annotation 
 
 
 -vep process with example 
