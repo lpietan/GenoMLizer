@@ -322,7 +322,15 @@ mlGene input_Train.csv input_Test.csv prefix seed number_of_clusters
 
 
  ## Tutorial
-Two sets of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory ().  
+Two sets of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory (example.vcf.gz, targets_file.txt and GenoMLizer_example.vcf.gz, GenoMLizer_example_targets). The first set are smaller files that will allow for running through the GenoMLizer commands quickly to check for any issues with the installation or dependencies. The second set consists of a slightly larger dataset, which will enable more comprehensive testing of the GenoMLizer commands' functionality. 
+
+Here is a tutorial for a quick run through.
+```
+
+# Variant assessment
+
+
+```
 
 In our studies mentioned above we found the best performance with our datasets to be with the following pipelines
 
