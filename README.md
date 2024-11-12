@@ -188,7 +188,7 @@ CHR:POS:GeneSymbol:CADD2
 
 
 #### splitTrainTest
-Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance. splitTrainTest has 3 agruments (order matters).
+Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance. The output of this command is the files input_Train.csv and input_Test.csv. splitTrainTest has 3 agruments (order matters).
 ```
 
 splitTrainTest input.csv NC_correction_threshold seed
@@ -247,7 +247,7 @@ DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables
 ```
 
 #### geneTransform
-Transforms variant variables to gene variables. Variants within the same gene annotations are binned. All allele variables are added to create a gene_allele variable and all CADD variables are added to create a gene_CADD variable. geneTransform has 5 agruments (order matters).
+Transforms variant variables to gene variables. Variants within the same gene annotations are binned. All allele variables are added to create a gene_allele variable and all CADD variables are added to create a gene_CADD variable. geneTransform has 5 agruments (order matters). If 'SFC' or 'DC' are selected for the correction, the file 'variables_corrected.csv' will also be outputted and is needed as input for the genePrep command. This file can and should be renamed if multiple runs of this command are being performed in the same directory. 
 ```
 
 geneTransform input.csv output.csv bpRegion correction correction_threshold
@@ -257,19 +257,46 @@ geneTransform input.csv output.csv bpRegion correction correction_threshold
    bpRegion                   -      Integer value (recommended value 25000). This sets the bin size in base pairs for variants to be binned into regions if the variants do not have a gene symbol annotation.  
    correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction
                                      and transforms variant variable as they are. 'SFC'
-                                     performs a sample allele frequency correction. If a variable in the training set has a greater amount of samples with alternative alleles than the correction_threshold, the 0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables. 'DC' performs a directional correction. If 
-   correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). Sets correction threshold. 
+                                     performs a sample allele frequency correction. If a variable in the training set has a greater amount of samples with alternative alleles than the correction_threshold, the 0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables. 'DC' performs a directional correction. Intended to adjust for protective effects. Calculates the ratio of a variable's alternative alleles to the controls and cases. If the ratio of alternative allele to controls exceeds the correction_threshold, the 0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables.
+   correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). Sets correction threshold. Optional if correction = 'NC'.
 
 ```
 
 #### varPrep
+Prepares the test set file and variant variables for ML model testing with the command mlVar. Intended to be used after all feature selection is performed on the training set and before the mlVar command. varPrep has 3 agruments (order matters).
+```
 
+varPrep input_Train.csv input_Test.csv output_Test.csv
+
+   input_Train.csv         -         Training input CSV file
+   input_Test.csv          -         Test input CSV file
+   output_Test.csv         -         Test output CSV file
+
+
+```
 
 #### genePrep
+Prepares the test set file and transforms the variant variables to gene variables for ML model testing with the command mlGene. Intended to be used after all feature selection and transformations are performed on the training set and before the mlGene command. genePrep has 6 agruments (order matters).
+```
 
+genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_performed correction_file
+
+   input_Train.csv         -         Training input CSV file
+   input_Test.csv          -         Test input CSV file
+   output_Test.csv         -         Test output CSV file
+   bpRegion                -         Integer value. Should be the same setting used with the geneTransform command with the training set. Setting has the same meaning as with the geneTransform command. 
+   correction_performed    -         Interger value, binary 0/1. 0 is no correction was performed with geneTransform with the training set. 1 is there was a correction ('SFC' or 'DC') performed with geneTransform with the training set.
+   correction_file         -         correction CSV file outputted from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. 
+
+```
 
 #### mlVar
+Performs model fitting and testing with the ML models mentioned above for variant . For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files '' and '' respectively  and included in the output file 
+```
 
+mlVar train test fac_allele_0/1 prefix seed number_of_clusters
+
+```
 
 #### mlGene
 
