@@ -218,11 +218,11 @@ CMI input.csv output.csv k seed number_of_clusters
 Performs Logistic Regression Filtering on variant or gene variables. Perfoms a logistic regression with either a Chi-squared or F test to calulate a p-value for association of the feature (predictor variable) with the target (response variable). GLM has 6 agruments (order matters).
 ```
 
-GLM input.csv output.csv Chisq/F Pvalue_threshold seed number_of_clusters
+GLM input.csv output.csv test Pvalue_threshold seed number_of_clusters
 
    input.csv               -      Input CSV file
    output.csv              -      Output CSV file 
-   Chisq/F                 -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F test.
+   test                    -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F test.
    Pvalue_threshold        -      Numeric value between 0 and 1 (recommended value <= 0.1). P-value treshold for association test. All variables with a p-value less than or equal to threshold will pass the filter. 
    seed                    -      Integer value, set seed for reproducible output
    number_of_clusters      -      Integer value, number of cluster for parallelization 
@@ -261,6 +261,14 @@ geneTransform input.csv output.csv bpRegion correction correction_threshold
    correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). Sets correction threshold. Optional if correction = 'NC'.
 
 ```
+Example of gene transformation output variable naming structure
+```
+GeneSymbol_Allele
+GeneSymbol_CADD
+# Or for variables without gene symbol annotation binned into regions
+CHR:POS_POS2_Allele
+CHR:POS_POS2_CADD
+```
 
 #### varPrep
 Prepares the test set file and variant variables for ML model testing with the command mlVar. Intended to be used after all feature selection is performed on the training set and before the mlVar command. varPrep has 3 agruments (order matters).
@@ -286,7 +294,7 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
    output_Test.csv         -         Test output CSV file
    bpRegion                -         Integer value. Should be the same setting used with the geneTransform command with the training set. Setting has the same meaning as with the geneTransform command. 
    correction_performed    -         Interger value, binary 0/1. 0 is no correction was performed with geneTransform with the training set. 1 is there was a correction ('SFC' or 'DC') performed with geneTransform with the training set.
-   correction_file         -         correction CSV file outputted from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. 
+   correction_file         -         correction CSV file outputted from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. No file needed if no correction (NC) was performed.
 
 ```
 
@@ -322,20 +330,118 @@ mlGene input_Train.csv input_Test.csv prefix seed number_of_clusters
 
 
  ## Tutorial
-Two sets of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory (example.vcf.gz, targets_file.txt and GenoMLizer_example.vcf.gz, GenoMLizer_example_targets). The first set are smaller files that will allow for running through the GenoMLizer commands quickly to check for any issues with the installation or dependencies. The second set consists of a slightly larger dataset, which will enable more comprehensive testing of the GenoMLizer commands' functionality. 
+A set of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory (GenoMLizer_example.vcf.gz, GenoMLizer_example_targets). These example files are provided for quick check for any issues with the installation or dependencies and testing of the GenoMLizer commands' functionality. Within the dataset, there is a synthetic variant at chr7:71248 with the gene symbol AC093627.7 that perfectly separates the synthetic case and controls in the target file and is expected to be selected by all feature selection strategies with variant or gene variables and allow for perfection prediction with the ML models.
 
 Here is a tutorial for a quick run through.
 ```
 
-# Variant assessment
+# Some processes may require additional memory in R
+# If an error occurs, the --max-ppsize can be set from the command line with the following example command 
+export GENOMLIZER_PPSIZE= 
+
+
+# Variant assessment, number_of_clusters can be adjusted for you system
+
+# Create dataset
+datasetCreator GenoMLizer_example.vcf.gz GenoMLizer_example_targets GenoMLizer_example.csv
+
+# Split the dataset
+splitTrainTest GenoMLizer_example.csv 0.8 123
+
+# Test CMI feature selection
+# k = 5
+CMI GenoMLizer_example_Train.csv GenoMLizer_example_Train_CMI.csv 5 123 1
+# k = 2
+CMI GenoMLizer_example_Train.csv GenoMLizer_example_Train_CMI.csv 2 123 1
+
+# Test GLM feature selection
+# test = Chisq
+GLM GenoMLizer_example_Train.csv GenoMLizer_example_Train_GLM-chi.csv Chisq 0.1 123 1
+# test = F
+GLM GenoMLizer_example_Train.csv GenoMLizer_example_Train_GLM-F.csv F 0.1 123 1
+
+# Test DTVI
+DTVI GenoMLizer_example_Train_GLM-chi.csv GenoMLizer_example_Train_GLM-chi_DTVI.csv 0 0.51 1000 2 123 1
+
+# Test variant test set prep
+varPrep GenoMLizer_example_Train_GLM-chi_DTVI.csv GenoMLizer_example_Test.csv GenoMLizer_example_Test_prepped.csv
+
+# Test ML variant analysis
+mlVar GenoMLizer_example_Train_GLM-chi_DTVI.csv GenoMLizer_example_Test_prepped.csv 0 GLM-DTVI 123 1
+
+
+
+# Gene assessment, number_of_clusters can be adjusted for you system
+
+# Gene transformation SFC
+geneTransform GenoMLizer_example_Train_GLM-chi.csv GenoMLizer_example_Train_GLM-chi_gene-SFC.csv 25000 SFC 0.5
+
+# Test additional gene variable feture selection
+GLM GenoMLizer_example_Train_GLM-chi_gene.csv GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv F 0.01 123 1
+
+# Test gene test set prep
+genePrep GenoMLizer_example_Train_GLM-chi.csv GenoMLizer_example_Test.csv GenoMLizer_example_Test_genePrepped.csv 25000 1 variables_corrected.csv
+
+# Test ML gene analysis
+mlGene GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv GenoMLizer_example_Test_genePrepped.csv gene_test 123 1
 
 
 ```
 
-In our studies mentioned above we found the best performance with our datasets to be with the following pipelines
+In our studies mentioned above, we found the best performance with our real datasets to be with the following pipelines.
+Variant pipeline
+   CMI-5_GLM-chisq-0.1_DTVI-1000-1
+   CMI-20_DTVI-1000-10
+Gene pipeline
+   GLM-0.05_GeneTransform_CMI-20
+The following commands will perform these analyses with GenoMLizer using the provided dataset as an example.
+```
 
-export GENOMLIZER_PPSIZE=500000
- -used pipelines from paper
+# Create dataset
+datasetCreator GenoMLizer_example.vcf.gz GenoMLizer_example_targets GenoMLizer_example.csv
+
+# Split the dataset
+splitTrainTest GenoMLizer_example.csv 0.8 123
+
+
+# CMI-5_GLM-chisq_DTVI-1000-1
+# CMI-5
+CMI GenoMLizer_example_Train.csv GenoMLizer_example_Train_CMI-5.csv 5 123 1
+# GLM-chisq 0.1
+GLM GenoMLizer_example_Train_CMI-5.csv GenoMLizer_example_Train_CMI-5_GLM-chi-01.csv Chisq 0.1 123 1
+# DTVI-1000-1
+DTVI GenoMLizer_example_Train_CMI-5_GLM-chi-01.csv GenoMLizer_example_Train_CMI-5_GLM-chi-01_DTVI.csv 0 1 1000 1 123 1
+# Test prep
+varPrep GenoMLizer_example_Train_CMI-5_GLM-chi-01_DTVI.csv GenoMLizer_example_Test.csv GenoMLizer_example_Test_prepped_CMI-5_GLM-chisq-01_DTVI-1000-1.csv
+# ML variant analysis
+mlVar GenoMLizer_example_Train_CMI-5_GLM-chi-01_DTVI.csv GenoMLizer_example_Test_prepped_CMI-5_GLM-chisq-01_DTVI-1000-1.csv 0 CMI_GLM_DTVI 123 1
+
+
+# CMI-20_DTVI-1000-10
+# CMI-20
+CMI GenoMLizer_example_Train.csv GenoMLizer_example_Train_CMI-20.csv 20 123 1
+# DTVI-1000-1
+DTVI GenoMLizer_example_Train_CMI-20.csv GenoMLizer_example_Train_CMI-20_DTVI.csv 0 1 1000 10 123 1
+# Test prep
+varPrep GenoMLizer_example_Train_CMI-20_DTVI.csv GenoMLizer_example_Test.csv GenoMLizer_example_Test_prepped_CMI-20_DTVI-1000-10.csv
+# ML variant analysis
+mlVar GenoMLizer_example_Train_CMI-20_DTVI.csv GenoMLizer_example_Test_prepped_CMI-20_DTVI-1000-10.csv 0 CMI_DTVI 123 1
+
+
+# GLM-0.05_GeneTransform_CMI-20
+# GLM-chisq-0.05
+GLM GenoMLizer_example_Train.csv GenoMLizer_example_Train_GLM-chi-005.csv Chisq 0.05 123 1
+# Gene Transform NC
+geneTransform GenoMLizer_example_Train_GLM-chi-005.csv GenoMLizer_example_Train_GLM-chi-005_gene-NC.csv 25000 NC
+# CMI-20
+CMI GenoMLizer_example_Train_GLM-chi-005_gene-NC.csv GenoMLizer_example_Train_GLM-chi-005_gene-NC_CMI-20.csv 20 123 1
+# Test gene test set prep
+genePrep GenoMLizer_example_Train_GLM-chi-005.csv GenoMLizer_example_Test.csv GenoMLizer_example_Test_genePrepped_GLM-005_GeneTransform_CMI-20.csv 25000 0
+# Test ML gene analysis
+mlGene GenoMLizer_example_Train_GLM-chi-005_gene-NC_CMI-20.csv GenoMLizer_example_Test_genePrepped_GLM-005_GeneTransform_CMI-20.csv GLM-005_GeneTransform_CMI-20 123 1
+
+
+```
 
 
  ## Advanced Setup 
