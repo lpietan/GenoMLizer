@@ -180,25 +180,53 @@ S5,1
 ```
 
 #### splitTrainTest
-Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance.
+Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance. splitTrainTest has 3 agruments (order matters).
 ```
 
 splitTrainTest input.csv NC_correction_threshold seed
 
    input.csv                    -      input CSV file, output from datasetCreator
-   NC_correction_threshold      -      No call threshold, numeric value between 0 and 1 (Recommended value 0.8). Setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a '0' 
-   seed                         -      
+   NC_correction_threshold      -      numeric value between 0 and 1 (Recommended value 0.8). No call threshold, setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a 0 (reference allele). 
+   seed                         -      integer value, set seed for reproducible split
 
 ```
 
 
 #### CMI
+Performs Conditional Mutual Information Maximization Filtering on variant or gene variables. Breaks the input dataset into 1000 variable intermediate datasets and selects variables with highest mutual information to pass the filter. CMI has 5 agruments (order matters).
+```
 
+CMI input.csv output.csv k seed number_of_clusters
+
+   input.csv               -      input CSV file
+   output.csv              -      output CSV file 
+   k                       -      integer value, k number of variables to select from each intermediat dataset
+   seed                    -      integer value, set seed for reproducible output
+   number_of_clusters      -      integer value, number of cluster for parallelization 
+
+```
 
 #### GLM
+Logistic Regression Filtering 
+```
 
+GLM input.csv output.csv Chisq/F Pvalue_threshold seed number_of_clusters
+
+   input.csv               -      input CSV file
+   output.csv              -      output CSV file 
+   k                       -      integer value, k number of variables to select from each intermediat dataset
+   seed                    -      integer value, set seed for reproducible output
+   number_of_clusters      -      integer value, number of cluster for parallelization 
+
+```
 
 #### DTVI
+Decision Tree Variable Importance Filtering 
+```
+
+DTVI input output fac_allele_0/1 ACCThreshold number_of_variables number_of_iterations seed number_of_clusters
+
+```
 
 
 #### geneTransform
