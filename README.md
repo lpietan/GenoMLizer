@@ -2,7 +2,7 @@
 
 
 # Desciption
-A machine learning pipeline for prioritizing variants as genetic modifiers of rare disorders.
+A machine learning (ML) pipeline for prioritizing variants as genetic modifiers of rare disorders.
 
 The goal of GenoMLizer is to help identify and prioritize genomic variants associated with disesase, specifically genetic modifiers of rare disorder.
 
@@ -159,6 +159,25 @@ mlGene
 ```
 
 #### datasetCreator
+Transforms variants from the VCF file to usable ML features. Four variables are created from each variant. Two allele variables, one for each allele, encoded as a 0 for the reference allele and 1 for the alternative alelle. And two CADD variables, one for each allele, utilizing the CADD score for the variant for encoding the alternative allele and 0 for the reference allele. datasetCreator has 3 agruments (order matters).
+```
+
+datasetCreator input.vcf.gz target_file output.csv
+
+   input.vcf.gz   -    preprocessed VCF file
+   target_file    -    a file containing the names of the samples and corresponing phenotype data encoded as 0/1
+   output.csv     -    the name of the output CSV file with the samples and transformed features
+
+```
+Structure of the `target_file`. The heading must be, `sampleNames,Targets`.
+```
+sampleNames,Targets
+S1,1
+S2,0
+S3,0
+S4,1
+S5,1
+```
 
 - datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
