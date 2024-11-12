@@ -59,13 +59,27 @@ bash install.sh
 ```
 With the install, example files will be downloaded to test the installation. These files are used in the [Tutorial](#tutorial) below. If the above commands do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
 ```
+   
+Python >= 3.9
+R ≥ 4.1.0
+BCFtools
 
-                   Python Requirements          R Requirments    
-Python >= 3.9      pandas>=1.5.0            MachineShop  e1071
-R ≥ 4.1.0          numpy>=1.21.5            praznik      tree
-BCFtools           vcf_parser               doSNOW       randomForest
-                   psutil                   dplyr        xgboost
-                                            readr
+# Python Requirements
+pandas>=1.5.0
+numpy>=1.21.5
+vcf_parser
+psutil
+
+# R Requirments
+MachineShop
+praznik
+doSNOW
+dplyr
+readr
+e1071
+tree
+randomForest
+xgboost
 
 ```
 Please refer to each package documentation for installation directions and individual requirements. Installation of R packages can be done with the following code. 
@@ -122,12 +136,29 @@ bcftools view -e 'N_ALT>1' -O z -o output.vcf.gz input.vcf.gz
 The GenoMLizer has the following commands that can be ran from the command line. 
 ```
 
-# Initisl Commands    # Feature Selection Commands 
-datasetCreator
+# Initial Commands     
+datasetCreator          
 splitTrainTest
 
+# Feature Selection
+CMI
+GLM
+DTVI
+
+# Gene Variable Transformation
+geneTransform
+
+# Test Set Prep
+varPrep
+genePrep
+
+# Model fitting, testing, and Variable Importance
+mlVar
+mlGene
 
 ```
+
+### datasetCreator
 
 - datsetCreator - add specifics about allele and cadd variables
 -commands and args and descriptions 
