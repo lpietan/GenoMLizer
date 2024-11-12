@@ -180,10 +180,14 @@ S5,1
 ```
 
 #### splitTrainTest
-Intended to be used after datasetCreator, splitTrainTest performs an 80/20 split of the dataset. 80% of the 
+Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance.
 ```
 
+splitTrainTest input.csv NC_correction_threshold seed
 
+   input.csv                    -      input CSV file, output from datasetCreator
+   NC_correction_threshold      -      No call threshold, numeric value between 0 and 1 (Recommended value 0.8). Setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a '0' 
+   seed                         -      
 
 ```
 
