@@ -6,7 +6,7 @@ A machine learning (ML) pipeline for prioritizing variants as genetic modifiers 
 
 The goal of GenoMLizer is to help identify and prioritize genomic variants associated with disease, specifically genetic modifiers of rare disorders.
 
-GenoMLizer accepts variant data from whole genome or exome sequencing in a VCF file, performs feature selection using several available techniques that are optimizable to each analysis, and then assesses the variant's (feature's) ability to predict disease/symptom/phenotype status by fitting several machine learning models. The output of GenoMLizer includes predictive performance metrics for each model tested, along with a permutation-based variable importance assessment for each model's variables. The GenoMLizer pipeline creates and formats two allele features (one for each allele) and two CADD features (using the CADD score of the variant) per variant to construct the initial dataset that then goes through a robust and reproducible protocol with an 80/20 training and test set split, feature selection and transformations, machine learning model hyperparameter tuning and model selection with 10-fold cross validation, and final testing of models on a true held-out test set. GenoMLizer can perform a variant assessment by utilizing the variant variables for model fitting or a gene assessment by binning the variant variables into gene regions and utilizing the gene variables for model fitting. Feature selection can be performed on either variant or gene variables. 
+GenoMLizer accepts variant data from whole genome or exome sequencing in a VCF file, performs feature selection with several available techniques that are optimizable to each analysis, and then evaluates the variants' (features') predictive ability for disease/symptom/phenotype status by fitting multiple machine learning models. The output of GenoMLizer includes predictive performance metrics for each model tested, along with a permutation-based variable importance assessment for each model's variables. The GenoMLizer pipeline constructs the initial dataset by creating and formatting two allele features (one for each allele) and two CADD features (using the variant's CADD score) per variant. This dataset then undergoes a rigorous and reproducible protocol, including an 80/20 split for training and testing, feature selection and transformations, hyperparameter tuning and model selection using 10-fold cross-validation, followed by final testing on a fully held-out test set. GenoMLizer can perform a variant assessment by utilizing the variant variables for model fitting or a gene assessment by binning the variant variables into gene regions and utilizing the gene variables for model fitting. Feature selection can be performed on either variant or gene variables. 
 
 Available feature selection algorithms
 * CMI - Conditional Mutual Information Maximization Filtering
@@ -28,12 +28,12 @@ Available machine learning models
 More details on GenoMLizer and its performance on a Turner syndrome dataset assessing genetic modifiers for the development of a bicuspid aortic valve can be found in the following paper. If you use GenoMLizer in your publication, please cite the following paper.
 ```
 
-Pietan, Lucas, Authors, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “GenoMLizer: Genome-wide Machine Learning Analysis for Genetic Modifiers.” Manuscript submitted to the journal Genome Research.
+Pietan, Lucas, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “GenoMLizer: Genome-wide Machine Learning Analysis for Genetic Modifiers.” Manuscript submitted to the journal Genome Research.
 
 ```
 
 
-Initial establishment of the analysis GenoMLizer was constructed from and its performance on a COVID-19 dataset assessing genetic modifiers for the loss of smell and/or taste symptoms can be found at the following paper
+Details on the initial development of GenoMLizer and its performance on a COVID-19 dataset assessing genetic modifiers for loss of smell and/or taste symptoms can be found in the following paper.
 ```
 
 Pietan, Lucas, Elizabeth Phillippi, Marcelo Melo, Hatem El-Shanti, Brian J Smith, Benjamin Darbro, Terry Braun, and Thomas Casavant. “Genome-wide Machine Learning Analysis of Anosmia and Ageusia in COVID-19.” Manuscript in Preparation for the journal Bioinformatics.
@@ -45,7 +45,7 @@ Pietan, Lucas, Elizabeth Phillippi, Marcelo Melo, Hatem El-Shanti, Brian J Smith
 
 ## Installation
 
-Installation of GenoMLizer and its dependencies can be done with the following commands. Bcftools is a requirement. The following script will check for installation, but not install. BCFtools will need to be installed manually, if needed. 
+Installation of GenoMLizer and most of its dependencies can be done with the following commands. `BCFtools` is a requirement, and the following script will check for its installation but will not install. `BCFtools` will need to be installed manually, if needed. 
 ```
 
 # Current setup and examples files
@@ -57,7 +57,7 @@ cd GenoMLizerSetup
 bash install.sh
 
 ```
-With the install, example files will be downloaded to test the installation. These files are used in the [Tutorial](#tutorial) below. If the above commands do not intall or GenoMLizer is not functioning propperly, check the following requirments. They may need to be updated or installed manually depending on your system. 
+With the installation, example files will be downloaded to test the setup. These files are used in the [Tutorial](#tutorial) below. If the above commands do not install GenoMLizer correctly or it is not functioning properly, check the following requirements. They may need to be updated or installed manually depending on your system. 
 ```
    
 Python >= 3.9
@@ -70,7 +70,7 @@ numpy>=1.21.5
 vcf_parser
 psutil
 
-# R Requirments
+# R Requirements
 MachineShop
 praznik
 doSNOW
@@ -82,7 +82,7 @@ randomForest
 xgboost
 
 ```
-Please refer to each package documentation for installation directions and individual requirements. Installation of R packages can be done with the following code. 
+Please refer to each package's documentation for installation instructions and individual requirements. Installation of R packages can be done with the following code. 
 ```R
 
 # Example of R package installation
@@ -91,14 +91,14 @@ install.packages("MachineShop")
 library(MachineShop)
 
 ```
-Installation of Python requirments in a virtual environment using conda is an option and can be done with the following code. BCFtools can also be installed with conda, if not already installed. 
+Installation of Python requirements in a virtual environment using `Conda` is an option and can be done with the following code. `BCFtools` can also be installed with `Conda`, if not already installed. 
 ```Python
 
-# Create conda environment with requirements
+# Create Conda environment with requirements
 conda create -n genomlizer_env python=3.9 r-base=4.1.0 numpy=1.21.5 pandas=1.5.0
 # Activate environment
 conda activate genomlizer_env
-# Example install of bcftools with conda
+# Example install of BCFtools with Conda
 conda install -c bioconda bcftools
 
 ```
@@ -106,7 +106,7 @@ conda install -c bioconda bcftools
 
  ## Usage
 
-GenoMLizer takes in a joint called or merged VCF file with all samples and genotypes in the same file and requires the variants to be annotated with Ensembl's `VEP` (Variant Effect Predictor). The VCF file needs only one annotation per variant and to have a variant annotation for gene symbol and for the varaint's CADD score. This can be accomplished with the following command.
+GenoMLizer accepts a jointly-called or merged VCF file with all samples and genotypes in a single file and requires the variants to be annotated with Ensembl's `VEP` (Variant Effect Predictor). The VCF file should contain only one annotation per variant and must include annotations for the gene symbol and the variant's CADD score. This can be accomplished with the following command.
 ```
 
 # Example VEP command
@@ -126,14 +126,14 @@ CADD,whole_genome_SNVs.tsv.gz,InDels.tsv.gz \
 
 ```
 
-The input VCF file should be filtered to variants with only one alternative allele. This can be done with following command using `BCFtools`. For additional options for file setup and preparation see the [Advanced Setup](#advanced-setup) section. 
+The input VCF file should be filtered to include variants with only one alternative allele. This can be done with the following command using `BCFtools`. For additional options for file setup and preparation, see the [Advanced Setup](#advanced-setup) section. 
 ```
 
 bcftools view -e 'N_ALT>1' -O z -o output.vcf.gz input.vcf.gz
 
 ```
 
-The GenoMLizer has the following commands that can be ran from the command line. 
+GenoMLizer includes the following commands, which can be run from the command line. 
 ```
 
 # Initial Commands     
@@ -159,7 +159,7 @@ mlGene
 ```
 
 #### datasetCreator
-Transforms variants from the VCF file to usable ML features. Four variables are created from each variant. Two allele variables, one for each allele, encoded as a 0 for the reference allele and 1 for the alternative alelle. And two CADD variables, one for each allele, utilizing the CADD score for the variant for encoding the alternative allele and 0 for the reference allele. datasetCreator has 3 agruments (order matters).
+Transforms variants from the VCF file into usable ML features. Four variables are created from each variant: two allele variables, one for each allele, encoded as a 0 for the reference allele and 1 for the alternative allele, and two CADD variables, one for each allele, using the CADD score to encode the alternative allele and 0 for the reference allele. `datasetCreator` has 3 arguments (order matters).
 ```
 
 datasetCreator input.vcf.gz target_file output.csv
@@ -188,41 +188,41 @@ CHR:POS:GeneSymbol:CADD2
 
 
 #### splitTrainTest
-Intended to be used after datasetCreator, splitTrainTest performs an 80/20 random split of the dataset. 80% of the samples for the training set and 20% for a true held-out test set. On the training set, ML house keeping corrections and filtering are performed. Variables are corrected for variant no calls (NC, '.' genotyopes in the VCF file) and variables are filtered for zero variance. The output of this command is the files input_Train.csv and input_Test.csv. splitTrainTest has 3 agruments (order matters).
+Intended to be used after `datasetCreator`, `splitTrainTest` performs an 80/20 random split of the dataset: 80% of the samples are assigned to the training set and 20% to a true held-out test set. On the training set, ML housekeeping corrections and filtering are performed. Variables are corrected for variant no-calls (NC, '.' genotypes in the VCF file), and variables are filtered for zero variance. The output of this command is the files `input_Train.csv` and `input_Test.csv`. `splitTrainTest` has 3 arguments (order matters).
 ```
 
 splitTrainTest input.csv NC_correction_threshold seed
 
    input.csv                    -      Input CSV file, output from datasetCreator
-   NC_correction_threshold      -      Numeric value between 0 and 1 (Recommended value 0.8). No call threshold, setting 0.8 would allow variables with a no call in 80% or more of the samples are filtered out. No calls of less than 80% are transformed to a 0 (reference allele). 
+   NC_correction_threshold      -      Numeric value between 0 and 1 (Recommended value 0.8). No-call threshold, setting 0.8 would allow variables with a no-call in 80% or more of the samples to be filtered out. No-calls of less than 80% are transformed to a 0 (reference allele). 
    seed                         -      Integer value, set seed for reproducible split
 
 ```
 
 
 #### CMI
-Performs Conditional Mutual Information Maximization Filtering on variant or gene variables. Breaks the input dataset into 1000 variable intermediate datasets and selects variables with highest mutual information to pass the filter. CMI has 5 agruments (order matters).
+Performs Conditional Mutual Information Maximization Filtering on variant or gene variables. It breaks the input dataset into 1,000-variable intermediate datasets and selects the variables with the highest mutual information to pass the filter. `CMI` has 5 arguments (order matters).
 ```
 
 CMI input.csv output.csv k seed number_of_clusters
 
    input.csv               -      Input CSV file
    output.csv              -      Output CSV file 
-   k                       -      Integer value, k number of variables to select from each intermediat dataset
+   k                       -      Integer value, k number of variables to select from each intermediate dataset
    seed                    -      Integer value, set seed for reproducible output
    number_of_clusters      -      Integer value, number of cluster for parallelization 
 
 ```
 
 #### GLM
-Performs Logistic Regression Filtering on variant or gene variables. Perfoms a logistic regression with either a Chi-squared or F test to calulate a p-value for association of the feature (predictor variable) with the target (response variable). GLM has 6 agruments (order matters).
+Performs Logistic Regression Filtering on variant or gene variables. Performs a logistic regression with either a Chi-squared or F-test to calculate a p-value for association of the feature (predictor variable) with the target (response variable). `GLM` has 6 arguments (order matters).
 ```
 
 GLM input.csv output.csv test Pvalue_threshold seed number_of_clusters
 
    input.csv               -      Input CSV file
    output.csv              -      Output CSV file 
-   test                    -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F test.
+   test                    -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F-test.
    Pvalue_threshold        -      Numeric value between 0 and 1 (recommended value <= 0.1). P-value treshold for association test. All variables with a p-value less than or equal to threshold will pass the filter. 
    seed                    -      Integer value, set seed for reproducible output
    number_of_clusters      -      Integer value, number of cluster for parallelization 
@@ -230,7 +230,7 @@ GLM input.csv output.csv test Pvalue_threshold seed number_of_clusters
 ```
 
 #### DTVI
-Decision Tree Variable Importance Filtering on variant or gene variables. Breaks the input dataset into user specified number variable intermediate datasets and fits a decision tree model. Hyperparameter tuning and model selection are done with a 10-fold cross validation. If the accuacy of the top decision tree model is greater than or equal to a user specified accuracy threshold, then a permutation-based variable importance assessment is performed. The variables with a variable importance score greater than 0 pass the filter. DTVI has 8 agruments (order matters).
+Decision Tree Variable Importance Filtering on variant or gene variables. It breaks the input dataset into intermediate datasets with a user-specified number of variables and fits a decision tree model. Hyperparameter tuning and model selection are performed with 10-fold cross-validation. If the accuracy of the top decision tree model is greater than or equal to a user-specified accuracy threshold, a permutation-based variable importance assessment is performed. The variables with a variable importance score greater than 0 pass the filter. `DTVI` has 8 arguments (order matters).
 ```
 
 DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables number_of_iterations seed number_of_clusters
@@ -238,7 +238,7 @@ DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables
    input.csv                  -      Input CSV file
    output.csv                 -      Output CSV file 
    allele_factorization       -      Integer value of 0/1. A value of 0 encodes all allele variables as numeric. A value of 1 encodes all allele variables as factor.
-   ACC_threshold              -      Numeric value between 0 and 1 (recommended value >= majority class accuracy). Accuracy trheshold for decision tree model. Setting value equal to 1 will set the accuracy threshold the the majority class accuracy of the input dataset.
+   ACC_threshold              -      Numeric value between 0 and 1 (recommended value >= majority class accuracy). Accuracy threshold for decision tree model. Setting value equal to 1 will set the accuracy threshold the the majority class accuracy of the input dataset.
    number_of_variables        -      Integer value, sets the number of variables to include in the intermidiate datasets
    number_of_iterations       -      Integer value, sets the number of time to filter through the initial input dataset
    seed                       -      Integer value, set seed for reproducible output
@@ -247,7 +247,7 @@ DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables
 ```
 
 #### geneTransform
-Transforms variant variables to gene variables. Variants within the same gene annotations are binned. All allele variables are added to create a gene_allele variable and all CADD variables are added to create a gene_CADD variable. geneTransform has 5 agruments (order matters). If 'SFC' or 'DC' are selected for the correction, the file 'variables_corrected.csv' will also be outputted and is needed as input for the genePrep command. This file can and should be renamed if multiple runs of this command are being performed in the same directory. 
+Transforms variant variables into gene variables. Variants within the same gene annotations are binned. All allele variables are summed to create a gene_allele variable and all CADD variables are summed to create a gene_CADD variable. `geneTransform` has 5 arguments (order matters). If `SFC` or `DC` are selected for the `correction`, the file `variables_corrected.csv` will also be output and is needed as input for the `genePrep` command. This file can and should be renamed if multiple runs of this command are performed in the same directory. 
 ```
 
 geneTransform input.csv output.csv bpRegion correction correction_threshold
@@ -271,7 +271,7 @@ CHR:POS_POS2_CADD
 ```
 
 #### varPrep
-Prepares the test set file and variant variables for ML model testing with the command mlVar. Intended to be used after all feature selection is performed on the training set and before the mlVar command. varPrep has 3 agruments (order matters).
+Prepares the test set file and variant variables for ML model testing with the `mlVar` command. It is intended to be used after all feature selection is performed on the training set and before the `mlVar` command. `varPrep` has 3 arguments (order matters).
 ```
 
 varPrep input_Train.csv input_Test.csv output_Test.csv
@@ -284,7 +284,7 @@ varPrep input_Train.csv input_Test.csv output_Test.csv
 ```
 
 #### genePrep
-Prepares the test set file and transforms the variant variables to gene variables for ML model testing with the command mlGene. Intended to be used after all feature selection and transformations are performed on the training set and before the mlGene command. genePrep has 6 agruments (order matters).
+Prepares the test set file and transforms the variant variables into gene variables for ML model testing with the command mlGene. It is intended to be used after all feature selection and transformations are performed on the training set and before the `mlGene` command. `genePrep` has 6 arguments (order matters).
 ```
 
 genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_performed correction_file
@@ -293,13 +293,13 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
    input_Test.csv          -         Test input CSV file
    output_Test.csv         -         Test output CSV file
    bpRegion                -         Integer value. Should be the same setting used with the geneTransform command with the training set. Setting has the same meaning as with the geneTransform command. 
-   correction_performed    -         Interger value, binary 0/1. 0 is no correction was performed with geneTransform with the training set. 1 is there was a correction ('SFC' or 'DC') performed with geneTransform with the training set.
-   correction_file         -         correction CSV file outputted from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. No file needed if no correction (NC) was performed.
+   correction_performed    -         Interger value, binary 0/1. 0 is no correction performed with geneTransform with the training set. 1 is there was a correction ('SFC' or 'DC') performed with geneTransform with the training set.
+   correction_file         -         correction CSV file output from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. No file needed if no correction (NC) was performed.
 
 ```
 
 #### mlVar
-Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model. The decision tree and random forest models have the features renamed due to syntax requirements. Due to this, there are two output files 'variableKeys_ML_train_dt_rf.csv' and 'variableKeys_ML_test_dt_rf.csv' that act as keys to renaming the features in the variable importance output files. mlVar has 6 agruments (order matters).
+Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models are selected using 10-fold cross-validation. The selected models are then tested on the held-out test set. The 10-fold cross-validation estimated predictive performance (training) metrics, and the true held-out test set performance metrics are included in the output files `prefix_train_results.csv` and `prefix_test_results.csv`, respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments is in `prefix_model_vi.csv` (full results) and `prefix_model_vi.pdf` (plot of top 40 variables) for each model. The decision tree and random forest models have the features renamed due to syntax requirements. Because of this, there are two output files `variableKeys_ML_train_dt_rf.csv` and `variableKeys_ML_test_dt_rf.csv`, which act as keys to renaming the features in the variable importance output files. `mlVar` has 6 arguments (order matters).
 ```
 
 mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_clusters
@@ -314,7 +314,7 @@ mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_
 ```
 
 #### mlGene
-Performs the same function as mlVar but for gene variables. Variable key ouput files for the decision tree and random forest models are 'variableKeys_gene_ML_train_dt_rf.csv' and 'variableKeys_gene_ML_test_dt_rf.csv'.  mlGene has 5 agruments (order matters).
+Performs the same function as `mlVar` but for gene variables. Variable key output files for the decision tree and random forest models are `variableKeys_gene_ML_train_dt_rf.csv` and `variableKeys_gene_ML_test_dt_rf.csv`.  `mlGene` has 5 arguments (order matters).
 
 ```
 
@@ -330,7 +330,7 @@ mlGene input_Train.csv input_Test.csv prefix seed number_of_clusters
 
 
  ## Tutorial
-A set of example files are downloaded with the installation of GenoMLizer and should be in the '/GenoMLizerSetup' directory (GenoMLizer_example.vcf.gz, GenoMLizer_example_targets). These example files are provided for quick check for any issues with the installation or dependencies and testing of the GenoMLizer commands' functionality. Within the dataset, there is a synthetic variant at chr7:71248 with the gene symbol AC093627.7 that perfectly separates the synthetic case and controls in the target file and is expected to be selected by all feature selection strategies with variant or gene variables and allow for perfection prediction with the ML models.
+A set of example files is downloaded with the installation of GenoMLizer and should be in the `/GenoMLizerSetup` directory (`GenoMLizer_example.vcf.gz`, `GenoMLizer_example_targets`). These example files are provided for quick check of any issues with the installation or dependencies, as well as for testing the functionality of the GenoMLizer commands. Within the dataset, there is a synthetic variant at chr7:71248 with the gene symbol AC093627.7, which perfectly separates the synthetic case and controls in the target file. This variant is expected to be selected by all feature selection strategies, whether using variant or gene variables, and to enable perfect prediction with the ML models.
 
 Here is a tutorial for a quick run through.
 ```
@@ -340,7 +340,7 @@ Here is a tutorial for a quick run through.
 export GENOMLIZER_PPSIZE= 
 
 
-# Variant assessment, number_of_clusters can be adjusted for you system
+# Variant assessment, number_of_clusters can be adjusted for your system
 
 # Create dataset
 datasetCreator GenoMLizer_example.vcf.gz GenoMLizer_example_targets GenoMLizer_example.csv
@@ -371,12 +371,12 @@ mlVar GenoMLizer_example_Train_GLM-chi_DTVI.csv GenoMLizer_example_Test_prepped.
 
 
 
-# Gene assessment, number_of_clusters can be adjusted for you system
+# Gene assessment, number_of_clusters can be adjusted for your system
 
 # Gene transformation SFC
 geneTransform GenoMLizer_example_Train_GLM-chi.csv GenoMLizer_example_Train_GLM-chi_gene-SFC.csv 25000 SFC 0.5
 
-# Test additional gene variable feture selection
+# Test additional gene variable feature selection
 GLM GenoMLizer_example_Train_GLM-chi_gene.csv GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv F 0.01 123 1
 
 # Test gene test set prep
@@ -390,10 +390,10 @@ mlGene GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv GenoMLizer_example_Test_g
 
 In our studies mentioned above, we found the best performance with our real datasets to be with the following pipelines.
 Variant pipeline
-   CMI-5_GLM-chisq-0.1_DTVI-1000-1
-   CMI-20_DTVI-1000-10
+   *CMI-5_GLM-chisq-0.1_DTVI-1000-1
+   *CMI-20_DTVI-1000-10
 Gene pipeline
-   GLM-0.05_GeneTransform_CMI-20
+   *GLM-0.05_GeneTransform_CMI-20
 The following commands will perform these analyses with GenoMLizer using the provided dataset as an example.
 ```
 
