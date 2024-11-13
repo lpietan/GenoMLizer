@@ -194,7 +194,8 @@ Intended to be used after `datasetCreator`, `splitTrainTest` performs an 80/20 r
 splitTrainTest input.csv NC_correction_threshold seed
 
    input.csv                    -      Input CSV file, output from datasetCreator
-   NC_correction_threshold      -      Numeric value between 0 and 1 (Recommended value 0.8). No-call threshold, setting 0.8 would allow variables with a no-call in 80% or more of the samples to be filtered out. No-calls of less than 80% are transformed to a 0 (reference allele). 
+   NC_correction_threshold      -      Numeric value between 0 and 1 (Recommended value 0.8). No-call threshold, setting 0.8 would allow variables with a no-call in 80% or
+                                       more of the samples to be filtered out. No-calls of less than 80% are transformed to a 0 (reference allele). 
    seed                         -      Integer value, set seed for reproducible split
 
 ```
@@ -223,7 +224,8 @@ GLM input.csv output.csv test Pvalue_threshold seed number_of_clusters
    input.csv               -      Input CSV file
    output.csv              -      Output CSV file 
    test                    -      'Chisq' or 'F' value. 'Chisq' performs a chi-squared test of association and 'F' performs an F-test.
-   Pvalue_threshold        -      Numeric value between 0 and 1 (recommended value <= 0.1). P-value treshold for association test. All variables with a p-value less than or equal to threshold will pass the filter. 
+   Pvalue_threshold        -      Numeric value between 0 and 1 (recommended value <= 0.1). P-value treshold for association test. All variables with a p-value less than or
+                                  equal to threshold will pass the filter. 
    seed                    -      Integer value, set seed for reproducible output
    number_of_clusters      -      Integer value, number of cluster for parallelization 
 
@@ -238,7 +240,8 @@ DTVI input.csv output.csv allele_factorization ACC_threshold number_of_variables
    input.csv                  -      Input CSV file
    output.csv                 -      Output CSV file 
    allele_factorization       -      Integer value of 0/1. A value of 0 encodes all allele variables as numeric. A value of 1 encodes all allele variables as factor.
-   ACC_threshold              -      Numeric value between 0 and 1 (recommended value >= majority class accuracy). Accuracy threshold for decision tree model. Setting value equal to 1 will set the accuracy threshold the the majority class accuracy of the input dataset.
+   ACC_threshold              -      Numeric value between 0 and 1 (recommended value >= majority class accuracy). Accuracy threshold for decision tree model. Setting value
+                                     equal to 1 will set the accuracy threshold the the majority class accuracy of the input dataset.
    number_of_variables        -      Integer value, sets the number of variables to include in the intermidiate datasets
    number_of_iterations       -      Integer value, sets the number of time to filter through the initial input dataset
    seed                       -      Integer value, set seed for reproducible output
@@ -254,10 +257,14 @@ geneTransform input.csv output.csv bpRegion correction correction_threshold
 
    input.csv                  -      Input CSV file
    output.csv                 -      Output CSV file 
-   bpRegion                   -      Integer value (recommended value 25000). This sets the bin size in base pairs for variants to be binned into regions if the variants do not have a gene symbol annotation.  
-   correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction
-                                     and transforms variant variable as they are. 'SFC'
-                                     performs a sample allele frequency correction. If a variable in the training set has a greater amount of samples with alternative alleles than the correction_threshold, the 0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables. 'DC' performs a directional correction. Intended to adjust for protective effects. Calculates the ratio of a variable's alternative alleles to the controls and cases. If the ratio of alternative allele to controls exceeds the correction_threshold, the 0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables.
+   bpRegion                   -      Integer value (recommended value 25000). This sets the bin size in base pairs for variants to be binned into regions if the variants do
+                                     not have a gene symbol annotation.  
+   correction                 -      'NC', 'SFC', or 'DC'. 'NC' performs no correction and transforms variant variable as they are. 'SFC' performs a sample allele frequency
+                                     correction. If a variable in the training set has a greater amount of samples with alternative alleles than the correction_threshold, the
+                                     0/1 encoding of the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables.
+                                     'DC' performs a directional correction. Intended to adjust for protective effects. Calculates the ratio of a variable's alternative
+                                     alleles to the controls and cases. If the ratio of alternative allele to controls exceeds the correction_threshold, the 0/1 encoding of
+                                     the variable is swapped (0's to 1's and 1's to 0's) before adding to the gene variable. Same action for CADD variables.
    correction_threshold       -      Numeric value between 0 and 1 (recommended value 0.5). Sets correction threshold. Optional if correction = 'NC'.
 
 ```
@@ -292,9 +299,12 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
    input_Train.csv         -         Training input CSV file
    input_Test.csv          -         Test input CSV file
    output_Test.csv         -         Test output CSV file
-   bpRegion                -         Integer value. Should be the same setting used with the geneTransform command with the training set. Setting has the same meaning as with the geneTransform command. 
-   correction_performed    -         Interger value, binary 0/1. 0 is no correction performed with geneTransform with the training set. 1 is there was a correction ('SFC' or 'DC') performed with geneTransform with the training set.
-   correction_file         -         correction CSV file output from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. No file needed if no correction (NC) was performed.
+   bpRegion                -         Integer value. Should be the same setting used with the geneTransform command with the training set. Setting has the same meaning as with
+                                     the geneTransform command. 
+   correction_performed    -         Interger value, binary 0/1. 0 is no correction performed with geneTransform with the training set. 1 is there was a correction ('SFC' or
+                                     'DC') performed with geneTransform with the training set.
+   correction_file         -         correction CSV file output from geneTransform (variables_corrected.csv). If the file was renamed, use the renamed file. No file needed if
+                                     no correction (NC) was performed.
 
 ```
 
