@@ -450,11 +450,18 @@ To increase memory for R processes `--max-ppsize` can be set with the following 
 ```
 export GENOMLIZER_PPSIZE=
 ```
+
 As mentioned in the [Usage](#usage) section, The VCF file must be filtered to variants with one alternative allele. There are a few exceptions to this and some alternative options if there is a need to retain all the variants. 
 * datasetCreator can function correctly with variants up to 9 alternative alleles
 * DTVI and mlVar commands with the `allele_factorization = 1` must have variants/variables with only one alternative allele
 * With `allele_factorization = 0` these commands will function correctly with multiple alternative alleles
 * Another option would be to transform the variants in the VCF file or the allele variables after running `datasetCreator` to make all alternative alleles encoded as 1
+
+
+
+
+
+asdfs
 
 
 
