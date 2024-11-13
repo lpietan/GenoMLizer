@@ -389,11 +389,14 @@ mlGene GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv GenoMLizer_example_Test_g
 ```
 
 In our studies mentioned above, we found the best performance with our real datasets to be with the following pipelines.
+
 Variant pipeline
 * CMI-5_GLM-chisq-0.1_DTVI-1000-1
 * CMI-20_DTVI-1000-10
+
 Gene pipeline
 * GLM-0.05_GeneTransform_CMI-20
+
 The following commands will perform these analyses with GenoMLizer using the provided dataset as an example.
 ```
 
