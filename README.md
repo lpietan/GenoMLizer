@@ -457,11 +457,6 @@ As mentioned in the [Usage](#usage) section, The VCF file must be filtered to va
 * With `allele_factorization = 0` these commands will function correctly with multiple alternative alleles
 * Another option would be to transform the variants in the VCF file or the allele variables after running `datasetCreator` to make all alternative alleles encoded as 1
 
-
-
-
-
-asdfs
-
+Most of the GenoMLizer commands function with temporary files. If multiple of the same commands are running simultaneously in the same directory, this may cause an error due to writing to or deletion of temporary files. To mitigate this, try to set up directories for each run.
 
 
