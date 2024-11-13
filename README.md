@@ -390,10 +390,10 @@ mlGene GenoMLizer_example_Train_GLM-chi_gene_GLM-F.csv GenoMLizer_example_Test_g
 
 In our studies mentioned above, we found the best performance with our real datasets to be with the following pipelines.
 Variant pipeline
-   *CMI-5_GLM-chisq-0.1_DTVI-1000-1
-   *CMI-20_DTVI-1000-10
+* CMI-5_GLM-chisq-0.1_DTVI-1000-1
+* CMI-20_DTVI-1000-10
 Gene pipeline
-   *GLM-0.05_GeneTransform_CMI-20
+* GLM-0.05_GeneTransform_CMI-20
 The following commands will perform these analyses with GenoMLizer using the provided dataset as an example.
 ```
 
@@ -446,12 +446,12 @@ mlGene GenoMLizer_example_Train_GLM-chi-005_gene-NC_CMI-20.csv GenoMLizer_exampl
 
  ## Advanced Setup 
 
-To increase memory for R processes `--max-ppsize` can be set with the following command. 
+To increase memory for R processes, `--max-ppsize` can be set with the following command. 
 ```
 export GENOMLIZER_PPSIZE=
 ```
 
-As mentioned in the [Usage](#usage) section, The VCF file must be filtered to variants with one alternative allele. There are a few exceptions to this and some alternative options if there is a need to retain all the variants. 
+As mentioned in the [Usage](#usage) section, The VCF file must be filtered to included variants with only one alternative allele. There are a few exceptions to this and some alternative options if there is a need to retain all the variants. 
 * datasetCreator can function correctly with variants up to 9 alternative alleles
 * DTVI and mlVar commands with the `allele_factorization = 1` must have variants/variables with only one alternative allele
 * With `allele_factorization = 0` these commands will function correctly with multiple alternative alleles
