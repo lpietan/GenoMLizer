@@ -299,7 +299,7 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
 ```
 
 #### mlVar
-Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model.  mlVar has 6 agruments (order matters).
+Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model. The decision tree and random forest models have the features renamed due to syntax requirements. Due to this, there are two output files 'variableKeys_ML_train_dt_rf.csv' and 'variableKeys_ML_test_dt_rf.csv' that act as keys to renaming the features in the variable importance output files. mlVar has 6 agruments (order matters).
 ```
 
 mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_clusters
@@ -314,7 +314,7 @@ mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_
 ```
 
 #### mlGene
-Performs the same function as mlVar but for gene variables. mlGene has 5 agruments (order matters).
+Performs the same function as mlVar but for gene variables. Variable key ouput files for the decision tree and random forest models are 'variableKeys_gene_ML_train_dt_rf.csv' and 'variableKeys_gene_ML_test_dt_rf.csv'.  mlGene has 5 agruments (order matters).
 
 ```
 
