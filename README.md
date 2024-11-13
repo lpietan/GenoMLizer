@@ -299,7 +299,7 @@ genePrep input_Train.csv input_Test.csv output_Test.csv bpRegion correction_perf
 ```
 
 #### mlVar
-Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model. mlVar has 6 agruments (order matters).
+Performs model fitting and testing with the ML models mentioned above for variant variables. For each model, hyperparameters are tuned and models selected with a 10-fold cross validation. Models selected are then tested on the held-out test set. 10-fold cross validation training estimate predictive performance metrics and true held-out test set performance metrics are included in the output files 'prefix_train_results.csv' and 'prefix_test_results.csv' respectively. The performance metrics included are brier score, accuracy, Cohen’s kappa, area under the receiver operating characteristic (ROC) curve, sensitivity, and specificity. A permutation-based variable importance assessment is done for each top model with 25 permutations. Output for the variable importance assessments are in 'prefix_model_vi.csv' (full results) and 'prefix_model_vi.pdf' (plot of top 40 variables) for each model.  mlVar has 6 agruments (order matters).
 ```
 
 mlVar input_Train.csv input_Test.csv allele_factorization prefix seed number_of_clusters
@@ -446,11 +446,15 @@ mlGene GenoMLizer_example_Train_GLM-chi-005_gene-NC_CMI-20.csv GenoMLizer_exampl
 
  ## Advanced Setup 
 
- - dataset creator can handle up 9 alt allele
- - DTVI and ML fitting in ML script need 0/1 encoding for allele variables if selecting factor
- - can perform a custom transformation of variables to 0/1
- - potentially pp size
+To increase memory for R processes `--max-ppsize` can be set with the following command. 
+```
+export GENOMLIZER_PPSIZE=
+```
+As mentioned in the [Usage](#usage) section, The VCF file must be filtered to variants with one alternative allele. There are a few exceptions to this and some alternative options if there is a need to retain all the variants. 
+* datasetCreator can function correctly with variants up to 9 alternative alleles
+* DTVI and mlVar commands with the `allele_factorization = 1` must have variants/variables with only one alternative allele
+* With `allele_factorization = 0` these commands will function correctly with multiple alternative alleles
+* Another option would be to transform the variants in the VCF file or the allele variables after running `datasetCreator` to make all alternative alleles encoded as 1
 
-- potentially troubleshooting section with warning and errors
 
- 
+
